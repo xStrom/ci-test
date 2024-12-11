@@ -18,6 +18,6 @@ jobs:
     name: 📎
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
-      name: ${{ inputs.name }}
+      name: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"Linux\", \"x86_64-pc-windows-msvc\": \"Windows\" }')[inputs.target] }}"
       os: ${{ inputs.os }}
       target: ${{ inputs.target }}
