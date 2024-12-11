@@ -30,3 +30,6 @@ jobs:
 
       - name: Run cargo fmt
         run: cargo fmt --all --check
+
+  remote-fmt:
+    uses: xStrom/ci-test/.github/workflows/formatting.yml@main
