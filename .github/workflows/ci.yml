@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       name-clippy: cargo clippy
+    steps:
+      - name: Foo
+        run: echo Foo
 
   local-fmt:
     name: local fmt
