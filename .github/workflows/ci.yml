@@ -1,0 +1,32 @@
+env:
+  # Whether the workspace contains Rust code using the debug_assertions configuration option.
+  USING_DEBUG_ASSERTIONS: "true"
+
+name: CI
+
+on:
+  pull_request:
+  merge_group:
+  # We run on push, even though the commit is the same as when we ran in merge_group.
+  # This allows the cache to be primed.
+  # See https://github.com/orgs/community/discussions/66430
+  push:
+    branches:
+      - main
+
+jobs:
+  local-fmt:
+    name: local fmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: 1.83
+          components: rustfmt
+
+      - name: Run cargo fmt
+        run: cargo fmt --all --check
