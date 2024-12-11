@@ -15,6 +15,12 @@ on:
       - main
 
 jobs:
+  config:
+    name: Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      name-clippy: cargo clippy
+
   local-fmt:
     name: local fmt
     runs-on: ubuntu-latest
@@ -36,7 +42,8 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   remote-clippy:
-    name: ${{ matrix.params.foo }}
+    name: ${{ needs.config.outputs.name-clippy }}
+    needs: config
     strategy:
       matrix:
         params:
