@@ -1,5 +1,5 @@
 env:
-  CI_VERSION: "main"
+  SOMETHING: "awesome"
 
 name: CI
 
@@ -18,30 +18,10 @@ jobs:
     name: Configuration
     runs-on: ubuntu-latest
     outputs:
-      ci-version: ${{ env.CI_VERSION }}
+      something: ${{ env.SOMETHING }}
     steps:
       - name: Foo
         run: echo Foo
-
-      - name: Create Clippy Proxy
-        run: |
-          cat <<'EOF' > ./.github/workflows/proxy-clippy.yml
-          name: Proxy Clippy Workflow
-
-          on:
-            workflow_call:
-              inputs:
-                target:
-                  type: string
-                  required: true
-
-          jobs:
-            proxy:
-              name: 🚀📎
-              uses: xStrom/ci-test/.github/workflows/clippy.yml@main
-              with:
-                target: ${{ inputs.target }}
-          EOF
 
   local-fmt:
     name: local fmt
@@ -65,10 +45,10 @@ jobs:
 
   remote-clippy:
     name: "${{ fromJson('''cargo clippy''') }}"
-    needs: config
+    #needs: config
     strategy:
       matrix:
         target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc]
-    uses: ./.github/workflows/middle-proxy-clippy.yml
+    uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       target: ${{ matrix.target }}
