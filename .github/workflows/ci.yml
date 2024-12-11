@@ -39,11 +39,11 @@ jobs:
       - name: Run cargo fmt
         run: cargo fmt --all --check
 
-  remote-fmt:
+  formatting:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
-  remote-clippy:
+  clippy:
     name: "${{ fromJson('''cargo clippy''') }}"
     #needs: config
     strategy:
