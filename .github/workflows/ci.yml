@@ -38,4 +38,5 @@ jobs:
   remote-clippy:
     name: cargo clippy
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
-  
+    with:
+      os: ubuntu-latest

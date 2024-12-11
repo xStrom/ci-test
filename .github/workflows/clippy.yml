@@ -9,14 +9,18 @@ name: cargo clippy
 
 on:
   workflow_call:
+    inputs:
+      os:
+        type: string
+        required: true
 
 jobs:
   clippy-stable:
-    name: cargo clippy
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    name: ${{ inputs.os }}
+    runs-on: ${{ inputs.os }}
+#    strategy:
+#      matrix:
+#        os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
