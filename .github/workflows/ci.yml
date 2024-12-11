@@ -46,7 +46,8 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   remote-clippy:
-    name: "${{ fromJson('{ \"name\": \"cargo clippy\" }')['name'] }}"
+    #name: "${{ fromJson('{ \"name\": \"cargo clippy\" }')['name'] }}"
+    name: "${{ 'cargo clippy' }}"
     needs: config
     strategy:
       matrix:
