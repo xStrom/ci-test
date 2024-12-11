@@ -1,6 +1,5 @@
 env:
-  # Whether the workspace contains Rust code using the debug_assertions configuration option.
-  USING_DEBUG_ASSERTIONS: "true"
+  CI_VERSION: "main"
 
 name: CI
 
@@ -19,11 +18,30 @@ jobs:
     name: Configuration
     runs-on: ubuntu-latest
     outputs:
-      remote-version: main
-      name-clippy: cargo clippy
+      ci-version: ${{ env.CI_VERSION }}
     steps:
       - name: Foo
         run: echo Foo
+
+      - name: Create Clippy Proxy
+        run: |
+          cat <<'EOF' > ./.github/workflows/proxy-clippy.yml
+          name: Proxy Clippy Workflow
+
+          on:
+            workflow_call:
+              inputs:
+                target:
+                  type: string
+                  required: true
+
+          jobs:
+            proxy:
+              name: 🚀📎
+              uses: xStrom/ci-test/.github/workflows/clippy.yml@main
+              with:
+                target: ${{ inputs.target }}
+          EOF
 
   local-fmt:
     name: local fmt
@@ -46,12 +64,11 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   remote-clippy:
-    #name: "${{ fromJson('{ \"name\": \"cargo clippy\" }')['name'] }}"
     name: "${{ fromJson('''cargo clippy''') }}"
     needs: config
     strategy:
       matrix:
         target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc]
-    uses: xStrom/ci-test/.github/workflows/proxy.yml@main
+    uses: .github/workflows/proxy-clippy.yml
     with:
       target: ${{ matrix.target }}
