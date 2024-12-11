@@ -22,7 +22,7 @@ on:
 
 jobs:
   clippy-stable:
-    name: ${{ inputs.name }}
+    name: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"Linux\", \"x86_64-pc-windows-msvc\": \"Windows\" }')[inputs.target] }}"
     runs-on: ${{ inputs.os }}
     steps:
       - name: Checkout repository
