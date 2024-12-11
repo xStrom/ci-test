@@ -21,8 +21,6 @@ jobs:
     outputs:
       remote-version: main
       name-clippy: cargo clippy
-      target-names: '{ "x86_64-unknown-linux-gnu": "Linux", "x86_64-pc-windows-msvc": "Windows" }'
-      target-oses: '{ "x86_64-unknown-linux-gnu": "ubuntu-latest", "x86_64-pc-windows-msvc": "windows-latest" }'
     steps:
       - name: Foo
         run: echo Foo
@@ -55,6 +53,4 @@ jobs:
         target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc]
     uses: xStrom/ci-test/.github/workflows/proxy.yml@main
     with:
-      name: ${{ fromJson(needs.config.outputs.target-names)[matrix.target] }}
-      os: ${{ fromJson(needs.config.outputs.target-oses)[matrix.target] }}
       target: ${{ matrix.target }}

@@ -3,12 +3,6 @@ name: Proxy Workflow
 on:
   workflow_call:
     inputs:
-      name:
-        type: string
-        required: true
-      os:
-        type: string
-        required: true
       target:
         type: string
         required: true
@@ -19,5 +13,5 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       name: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"Linux\", \"x86_64-pc-windows-msvc\": \"Windows\" }')[inputs.target] }}"
-      os: ${{ inputs.os }}
+      os: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"ubuntu-latest\", \"x86_64-pc-windows-msvc\": \"windows-latest\" }')[inputs.target] }}"
       target: ${{ inputs.target }}
