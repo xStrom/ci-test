@@ -1,0 +1,23 @@
+name: Proxy Workflow
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      os:
+        type: string
+        required: true
+      target:
+        type: string
+        required: true
+
+jobs:
+  proxy:
+    name: Proxy Job
+    uses: xStrom/ci-test/.github/workflows/clippy.yml@main
+    with:
+      name: ${{ inputs.name }}
+      os: ${{ inputs.os }}
+      target: ${{ inputs.target }}
