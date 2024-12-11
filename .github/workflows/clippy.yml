@@ -10,17 +10,20 @@ name: cargo clippy
 on:
   workflow_call:
     inputs:
+      name:
+        type: string
+        required: true
       os:
+        type: string
+        required: true
+      target:
         type: string
         required: true
 
 jobs:
   clippy-stable:
-    name: ${{ inputs.os }}
+    name: ${{ inputs.name }}
     runs-on: ${{ inputs.os }}
-#    strategy:
-#      matrix:
-#        os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,7 +32,8 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_STABLE_VER }}
+          targets: ${{ inputs.target }}
           components: clippy
 
       - name: Run cargo clippy
-        run: cargo clippy --workspace --locked --profile ci -- -D warnings
+        run: cargo clippy --workspace --locked --profile ci --target ${{ inputs.target }} -- -D warnings
