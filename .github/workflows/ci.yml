@@ -47,7 +47,7 @@ jobs:
 
   remote-clippy:
     #name: "${{ fromJson('{ \"name\": \"cargo clippy\" }')['name'] }}"
-    name: "${{ fromJson('\"cargo clippy\"') }}"
+    name: "${{ fromJson('cargo clippy') }}"
     needs: config
     strategy:
       matrix:
