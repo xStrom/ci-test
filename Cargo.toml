@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = ["test"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.80"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/xStrom/ci-test"
