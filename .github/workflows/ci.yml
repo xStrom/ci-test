@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       name-clippy: cargo clippy
+      target-names: '{ "x86_64-unknown-linux-gnu": "Linux", "x86_64-pc-windows-msvc": "Windows" }'
     steps:
       - name: Foo
         run: echo Foo
@@ -52,14 +53,10 @@ jobs:
         params:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
-            name: Linux
-            foo: cargo clippy
           - target: x86_64-pc-windows-msvc
             os: windows-latest
-            name: Windows
-            foo: cargo clippy
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
-      name: ${{ matrix.params.name }}
+      name: ${{ fromJson(needs.config.outputs.target-names)[matrix.params.target] }}
       os: ${{ matrix.params.os }}
       target: ${{ matrix.params.target }}
