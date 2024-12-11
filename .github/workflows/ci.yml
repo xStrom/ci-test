@@ -36,16 +36,18 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   remote-clippy:
-    name: cargo clippy ${{ matrix.params.name }}
+    name: ${{ matrix.params.foo }}
     strategy:
       matrix:
         params:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             name: Linux
+            foo: cargo clippy
           - target: x86_64-pc-windows-msvc
             os: windows-latest
             name: Windows
+            foo: cargo clippy
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       name: ${{ matrix.params.name }}
