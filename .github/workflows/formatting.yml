@@ -12,7 +12,7 @@ on:
 
 jobs:
   fmt:
-    name: formattingz
+    name: 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
