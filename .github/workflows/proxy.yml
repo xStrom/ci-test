@@ -15,7 +15,7 @@ on:
 
 jobs:
   proxy:
-    name: Proxy Job
+    name: cargo clippy
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       name: ${{ inputs.name }}
