@@ -36,7 +36,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   remote-clippy:
-    name: cargo clippy
+    name: cargo clippy ${{ matrix.params.name }}
     strategy:
       matrix:
         params:
