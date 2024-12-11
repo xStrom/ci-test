@@ -37,8 +37,17 @@ jobs:
 
   remote-clippy:
     name: cargo clippy
+    strategy:
+      matrix:
+        params:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            name: Linux
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: Windows
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
-      name: Linux
-      os: ubuntu-latest
-      target: x86_64-unknown-linux-gnu
+      name: ${{ matrix.params.name }}
+      os: ${{ matrix.params.os }}
+      target: ${{ matrix.params.target }}
