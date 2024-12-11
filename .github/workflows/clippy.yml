@@ -5,15 +5,18 @@ env:
   # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
   RUST_STABLE_VER: "1.82" # In quotes because otherwise (e.g.) 1.70 would be interpreted as 1.7
 
-name: Formatting
+name: cargo clippy
 
 on:
   workflow_call:
 
 jobs:
-  fmt:
-    name: x86_64-unknown-linux-gnu
-    runs-on: ubuntu-latest
+  clippy-stable:
+    name: cargo clippy
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,7 +25,7 @@ jobs:
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_STABLE_VER }}
-          components: rustfmt
+          components: clippy
 
-      - name: Run cargo fmt
-        run: cargo fmt --all --check
+      - name: Run cargo clippy
+        run: cargo clippy --workspace --locked --profile ci -- -D warnings

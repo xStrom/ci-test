@@ -34,3 +34,8 @@ jobs:
   remote-fmt:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
+
+  remote-clippy:
+    name: cargo clippy
+    uses: xStrom/ci-test/.github/workflows/clippy.yml@main
+  
