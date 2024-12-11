@@ -10,12 +10,6 @@ name: cargo clippy
 on:
   workflow_call:
     inputs:
-      name:
-        type: string
-        required: true
-      os:
-        type: string
-        required: true
       target:
         type: string
         required: true
@@ -23,7 +17,7 @@ on:
 jobs:
   clippy-stable:
     name: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"Linux\", \"x86_64-pc-windows-msvc\": \"Windows\" }')[inputs.target] }}"
-    runs-on: ${{ inputs.os }}
+    runs-on: "${{ fromJson('{ \"x86_64-unknown-linux-gnu\": \"ubuntu-latest\", \"x86_64-pc-windows-msvc\": \"windows-latest\" }')[inputs.target] }}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
