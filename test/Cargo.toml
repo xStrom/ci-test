@@ -4,10 +4,3 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-
-[profile.ci]
-inherits = "dev"
-debug = 0 # Don't compile debug info to reduce compilation artifact size for cache benefits.
-strip = "debuginfo" # Implied by debug = 0 since Rust 1.77, but still needed for an older MSRV.
-[profile.ci.package."*"]
-debug-assertions = true # Keep always on for dependencies for cache reuse.
