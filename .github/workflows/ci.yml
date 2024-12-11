@@ -51,11 +51,9 @@ jobs:
     needs: config
     strategy:
       matrix:
-        params:
-          - target: x86_64-unknown-linux-gnu
-          - target: x86_64-pc-windows-msvc
+        target: ["x86_64-unknown-linux-gnu", "x86_64-pc-windows-msvc"]
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
-      name: ${{ fromJson(needs.config.outputs.target-names)[matrix.params.target] }}
-      os: ${{ fromJson(needs.config.outputs.target-oses)[matrix.params.target] }}
-      target: ${{ matrix.params.target }}
+      name: ${{ fromJson(needs.config.outputs.target-names)[matrix.target] }}
+      os: ${{ fromJson(needs.config.outputs.target-oses)[matrix.target] }}
+      target: ${{ matrix.target }}
