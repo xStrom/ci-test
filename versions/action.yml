@@ -13,7 +13,7 @@ outputs:
   # come automatically. If the version specified here is no longer the latest stable version,
   # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
   rust-stable:
-    value: "1.82" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
+    value: 1.80
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
 
