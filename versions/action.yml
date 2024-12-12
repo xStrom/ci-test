@@ -25,3 +25,4 @@ runs:
       id: testing
       run: |
         echo "cool=$msrv" >> $GITHUB_OUTPUT
+      shell: bash
