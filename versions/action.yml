@@ -31,3 +31,4 @@ runs:
           exit 1
         fi
         echo "version=$msrv" >> $GITHUB_OUTPUT
+        echo "MSRV is $msrv"
