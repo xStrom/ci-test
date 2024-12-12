@@ -38,12 +38,8 @@ jobs:
       - name: Determine Rust versions
         id: versions
         uses: xStrom/ci-test/versions@main
-      
-      - name: Foobar
-        run: |
-          echo $msrv
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-msrv }} and ${{ steps.versions.outputs.cool }}
+      - name: Install Rust ${{ steps.versions.outputs.rust-msrv }}
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ steps.versions.outputs.rust-msrv }}
