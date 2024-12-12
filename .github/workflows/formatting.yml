@@ -51,5 +51,7 @@ jobs:
         if: inputs.rdme-projects != ''
         run: |
           for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
+            echo "Running cargo rdme on $project ..."
             cargo rdme --check --heading-base-level=0 --workspace-project=$project
           done
+          echo "All projects are up to date."
