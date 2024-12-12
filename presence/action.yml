@@ -15,11 +15,12 @@ runs:
       id: debug-assertions
       shell: bash
       run: |
+        which rg
         results=$(rg "debug_assertions" -g "*.rs" .)
         if [ -n "$results" ]; then
           echo "present=true" >> $GITHUB_OUTPUT
           echo "Found debug_assertions in Rust code."
         else
           echo "present=false" >> $GITHUB_OUTPUT
-          echo "Found debug_assertions in Rust code."
+          echo "Did not find debug_assertions in Rust code."
         fi
