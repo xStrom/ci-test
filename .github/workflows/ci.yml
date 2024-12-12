@@ -24,7 +24,7 @@ jobs:
         run: echo Foo
 
   local-fmt:
-    name: local fmt
+    name: Local
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -48,7 +48,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
   clippy:
-    name: "${{ fromJson('''cargo clippy''') }}"
+    name: ${{ fromJson('''Clippy''') }}
     strategy:
       matrix:
         target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc]
