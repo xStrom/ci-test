@@ -2,6 +2,12 @@ name: Formatting
 
 on:
   workflow_call:
+    inputs:
+      # Basic inputs
+      rdme-projects:
+        type: string
+        required: false
+        default: ""
 
 jobs:
   formatting:
@@ -23,3 +29,27 @@ jobs:
 
       - name: Run cargo fmt
         run: cargo fmt --all --check
+
+      - name: Install ripgrep
+        run: |
+          sudo apt update
+          sudo apt install ripgrep
+
+      # - name: Check copyright headers
+      #   run: bash .github/copyright.sh
+
+      # - name: Check debug_assertions presence
+      #   run: bash .github/debug_assertions.sh
+
+      - name: Install cargo-rdme
+        if: inputs.rdme-projects != ''
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-rdme
+
+      - name: Run cargo rdme
+        if: inputs.rdme-projects != ''
+        run: |
+          for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
+            cargo rdme --check --heading-base-level=0 --workspace-project=$project
+          done
