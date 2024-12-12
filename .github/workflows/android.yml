@@ -16,14 +16,18 @@ on:
         required: false
         default: >
           {
-            "aarch64-linux-android": "AArch64"
+            "x86_64-linux-android":       "x64",
+            "aarch64-linux-android":      "ARM64",
+            "armv7-linux-androideabi":    "ARMv7"
           }
       oses:
         type: string
         required: false
         default: >
           {
-            "aarch64-linux-android": "ubuntu-latest"
+            "x86_64-linux-android":       "ubuntu-latest",
+            "aarch64-linux-android":      "ubuntu-latest",
+            "armv7-linux-androideabi":    "ubuntu-latest"
           }
 
 jobs:
