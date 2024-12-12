@@ -55,7 +55,7 @@ jobs:
     name: ${{ fromJson('''Clippy''') }}
     strategy:
       matrix:
-        target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc]
+        target: [x86_64-pc-windows-msvc, x86_64-unknown-linux-gnu]
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       target: ${{ matrix.target }}

@@ -26,9 +26,6 @@ on:
             "aarch64-linux-android":      "Android ARM64",
             "armv7-linux-androideabi":    "Android ARMv7",
           
-            "x86_64-apple-ios":           "iOS x64",
-            "aarch64-apple-ios":          "iOS ARM64",
-          
             "wasm32-unknown-unknown":     "Wasm"
           }
       oses:
