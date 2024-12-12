@@ -1,0 +1,49 @@
+name: cargo check (msrv)
+
+on:
+  workflow_call:
+    inputs:
+      # Basic inputs
+      target:
+        type: string
+        required: true
+      # Advanced inputs
+      names:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-unknown-linux-gnu": "Linux",
+            "x86_64-pc-windows-msvc":   "Windows",
+            "aarch64-apple-darwin":     "macOS"
+          }
+      oses:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-unknown-linux-gnu": "ubuntu-latest",
+            "x86_64-pc-windows-msvc":   "windows-latest",
+            "aarch64-apple-darwin":     "macos-latest"
+          }
+
+jobs:
+  check-msrv:
+    name: ${{ fromJson(inputs.names)[inputs.target] }}
+    runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine Rust versions
+        id: versions
+        uses: xStrom/ci-test/versions@main
+
+      - name: Install Rust ${{ steps.versions.outputs.rust-msrv }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ steps.versions.outputs.rust-msrv }}
+          targets: ${{ inputs.target }}
+
+      - name: Run cargo check
+        run: cargo check --workspace --locked --profile ci --target ${{ inputs.target }}
