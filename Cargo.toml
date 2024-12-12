@@ -3,6 +3,7 @@ resolver = "2"
 members = ["test"]
 
 [workspace.package]
+version = "0.0.0"
 edition = "2021"
 # rust-version = "77.88" # Fake for regex
   "rust-version"   =   '''1.80.0''' # We're quirky on purpose to test the regex.
