@@ -20,7 +20,9 @@ runs:
         if [ -n "$results" ]; then
           echo "present=true" >> $GITHUB_OUTPUT
           echo "Found debug_assertions in Rust code."
+          exit 0
         else
           echo "present=false" >> $GITHUB_OUTPUT
           echo "Did not find debug_assertions in Rust code."
+          exit 0
         fi
