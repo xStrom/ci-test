@@ -1,0 +1,25 @@
+name: Presence
+description: Checks whether debug_assertions is present in Rust code.
+
+outputs:
+  debug-assertions:
+    value: ${{ steps.debug-assertions.outputs.present }}
+
+runs:
+  using: composite
+  steps:
+    #- name: Install ripgrep
+    #  run: cargo install ripgrep
+
+    - name: Check for debug_assertions in Rust code
+      id: debug-assertions
+      shell: bash
+      run: |
+        results=$(rg "debug_assertions" -g "*.rs" .)
+        if [ -n "$results" ]; then
+          echo "present=true" >> $GITHUB_OUTPUT
+          echo "Found debug_assertions in Rust code."
+        else
+          echo "present=false" >> $GITHUB_OUTPUT
+          echo "Found debug_assertions in Rust code."
+        fi

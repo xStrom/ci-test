@@ -35,6 +35,14 @@ jobs:
           sudo apt update
           sudo apt install ripgrep
 
+      - name: Testing presence
+        id: presence
+        uses: xStrom/ci-test/presence@main
+
+      - name: Presence results
+        run: |
+          echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug_assertions }}"
+
       # - name: Check copyright headers
       #   run: bash .github/copyright.sh
 
