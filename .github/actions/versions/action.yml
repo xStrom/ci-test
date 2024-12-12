@@ -1,12 +1,18 @@
 name: Versions
 description: Returns various Rust versions.
 outputs:
+  # We aim to always test with the latest stable Rust toolchain, however we pin to a specific
+  # version like 1.80. Note that we only specify MAJOR.MINOR and not PATCH so that bugfixes still
+  # come automatically. If the version specified here is no longer the latest stable version,
+  # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
   rust-stable:
-    value: ${{ steps.rust-stable.outputs.version }}
+    value: "1.82" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
+  rust-msrv:
+    value: ${{ steps.rust-msrv.outputs.version }}
 runs:
   using: composite
   steps:
-    - name: Rust stable
-      id: rust-stable
-      run: echo "version=\"1.82\"" >> $GITHUB_OUTPUT
+    - name: Rust MSRV
+      id: rust-msrv
+      run: echo "version=1.80" >> $GITHUB_OUTPUT
       shell: bash
