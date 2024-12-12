@@ -1,10 +1,3 @@
-env:
-  # We aim to always test with the latest stable Rust toolchain, however we pin to a specific
-  # version like 1.70. Note that we only specify MAJOR.MINOR and not PATCH so that bugfixes still
-  # come automatically. If the version specified here is no longer the latest stable version,
-  # then please feel free to submit a PR that adjusts it along with the potential clippy fixes.
-  RUST_STABLE_VER: "1.82" # In quotes because otherwise (e.g.) 1.70 would be interpreted as 1.7
-
 name: Formatting
 
 on:
@@ -18,10 +11,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Rust ${{ env.RUST_STABLE_VER }}
+      - name: Determine Rust versions
+        id: versions
+        uses: xStrom/ci-test/versions@main
+
+      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ env.RUST_STABLE_VER }}
+          toolchain: ${{ steps.versions.outputs.rust-stable }}
           components: rustfmt
 
       - name: Run cargo fmt

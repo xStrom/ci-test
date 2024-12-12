@@ -33,9 +33,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - id: versions
-        #uses: xStrom/ci-test/.github/actions/versions@main
-        uses: ./.github/actions/versions
+      - name: Determine Rust versions
+        id: versions
+        uses: xStrom/ci-test/versions@main
 
       - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
