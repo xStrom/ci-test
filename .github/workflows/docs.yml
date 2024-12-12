@@ -1,0 +1,48 @@
+name: Docs
+
+on:
+  workflow_call:
+    inputs:
+      # Basic inputs
+      target:
+        type: string
+        required: true
+      # Advanced inputs
+      names:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-unknown-linux-gnu": "Linux",
+            "x86_64-pc-windows-msvc":   "Windows",
+            "aarch64-apple-darwin":     "macOS"
+          }
+      oses:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-unknown-linux-gnu": "ubuntu-latest",
+            "x86_64-pc-windows-msvc":   "windows-latest",
+            "aarch64-apple-darwin":     "macos-latest"
+          }
+
+jobs:
+  docs:
+    name: ${{ fromJson(inputs.names)[inputs.target] }}
+    runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust nightly
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly
+          targets: ${{ inputs.target }}
+
+      # We test documentation using nightly to match docs.rs.
+      - name: Run cargo doc
+        run: cargo doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-deps --document-private-items -Zunstable-options -Zrustdoc-scrape-examples
+        env:
+          RUSTDOCFLAGS: '--cfg docsrs -D warnings'
