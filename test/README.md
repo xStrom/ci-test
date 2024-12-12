@@ -2,7 +2,7 @@
 
 <!-- cargo-rdme start -->
 
-This is a simple test project so the CI has something to verify.
+This is a simple test project so the CI has something to verify. ----
 
 <!-- cargo-rdme end -->
 
