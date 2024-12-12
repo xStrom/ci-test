@@ -1,6 +1,3 @@
-env:
-  SOMETHING: "awesome"
-
 name: CI
 
 on:
@@ -14,15 +11,6 @@ on:
       - main
 
 jobs:
-  config:
-    name: Configuration
-    runs-on: ubuntu-latest
-    outputs:
-      something: ${{ env.SOMETHING }}
-    steps:
-      - name: Foo
-        run: echo Foo
-
   local-fmt:
     name: Local
     runs-on: ubuntu-latest
