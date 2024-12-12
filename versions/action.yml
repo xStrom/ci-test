@@ -14,5 +14,6 @@ runs:
   steps:
     - name: Rust MSRV
       id: rust-msrv
-      run: echo "version=1.80" >> $GITHUB_OUTPUT
+      run: |
+        echo "version=$(perl -nle 'print $1 if /^\s*[^\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)" >> $GITHUB_OUTPUT
       shell: bash
