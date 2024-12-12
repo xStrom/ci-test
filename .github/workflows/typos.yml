@@ -5,7 +5,7 @@ on:
 
 jobs:
   formatting:
-    name: Generic
+    name: 📜
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
