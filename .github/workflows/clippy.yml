@@ -40,10 +40,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Rust ${{ env.RUST_STABLE_VER }}
+      - id: versions
+        uses: xStrom/ci-test/.github/actions/versions.yml@main
+
+      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ env.RUST_STABLE_VER }}
+          toolchain: ${{ steps.versions.outputs.rust-stable }}
           targets: ${{ inputs.target }}
           components: clippy
 

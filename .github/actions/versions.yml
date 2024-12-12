@@ -1,0 +1,12 @@
+name: Versions
+description: Returns various Rust versions.
+outputs:
+  rust-stable:
+    value: ${{ steps.rust-stable.outputs.version }}
+runs:
+  using: composite
+  steps:
+    - name: Rust stable
+      id: rust-stable
+      run: echo "version=\"1.82\"" >> $GITHUB_OUTPUT
+      shell: bash
