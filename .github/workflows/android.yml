@@ -4,10 +4,10 @@ on:
   workflow_call:
     inputs:
       # Basic inputs
-      packages:
-        type: string
-        required: false
       target:
+        type: string
+        required: true
+      packages:
         type: string
         required: true
       # Advanced inputs
@@ -48,6 +48,6 @@ jobs:
         run: cargo install cargo-apk
 
       - name: Run cargo apk check
-        run: cargo apk check ${{ inputs.packages && inputs.packages || '--workspace' }} --profile ci --target ${{ inputs.target }} --all-features
+        run: cargo apk check ${{ inputs.packages }} --profile ci --target ${{ inputs.target }} --all-features
         env:
           RUSTFLAGS: '-D warnings'

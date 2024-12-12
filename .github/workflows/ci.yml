@@ -68,6 +68,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/android.yml@main
     with:
       target: ${{ matrix.target }}
+      packages: "-p test"
 
   msrv:
     name: ${{ fromJson('''MSRV''') }}
