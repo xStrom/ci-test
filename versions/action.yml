@@ -9,11 +9,19 @@ outputs:
     value: "1.82" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
+  cool:
+    value: ${{ steps.testing.outputs.cool }}
 runs:
   using: composite
   steps:
     - name: Rust MSRV
       id: rust-msrv
       run: |
-        echo "version=$(perl -nle 'print $1 if /^\s*[^\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)" >> $GITHUB_OUTPUT
+        msrv=$(perl -nle 'print $1 if /^\s*[^\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)
+        echo "version=$msrv" >> $GITHUB_OUTPUT
       shell: bash
+
+    - name: Testing
+      id: testing
+      run: |
+        echo "cool=$msrv" >> $GITHUB_OUTPUT
