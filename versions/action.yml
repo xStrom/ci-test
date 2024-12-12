@@ -1,5 +1,12 @@
 name: Versions
 description: Returns various Rust versions.
+
+inputs:
+  rust-msrv:
+    description: Whether to determine MSRV.
+    required: false
+    default: "false"
+
 outputs:
   # We aim to always test with the latest stable Rust toolchain, however we pin to a specific
   # version like 1.80. Note that we only specify MAJOR.MINOR and not PATCH so that bugfixes still
@@ -9,11 +16,14 @@ outputs:
     value: "1.82" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
+
 runs:
   using: composite
   steps:
     - name: Rust MSRV
       id: rust-msrv
+      if: ${{ inputs.rust-msrv == "true" }}
+      shell: bash
       run: |
         msrv=$(perl -nle 'print $1 if /^\s*[^#\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)
         if [ -z "$msrv" ]; then
@@ -21,4 +31,3 @@ runs:
           exit 1
         fi
         echo "version=$msrv" >> $GITHUB_OUTPUT
-      shell: bash

@@ -38,6 +38,8 @@ jobs:
       - name: Determine Rust versions
         id: versions
         uses: xStrom/ci-test/versions@main
+        with:
+          rust-msrv: "true"
 
       - name: Install Rust ${{ steps.versions.outputs.rust-msrv }}
         uses: dtolnay/rust-toolchain@master
