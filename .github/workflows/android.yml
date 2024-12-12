@@ -1,0 +1,53 @@
+name: Android
+
+on:
+  workflow_call:
+    inputs:
+      # Basic inputs
+      packages:
+        type: string
+        required: true
+      target:
+        type: string
+        required: true
+      # Advanced inputs
+      names:
+        type: string
+        required: false
+        default: >
+          {
+            "aarch64-linux-android": "AArch64"
+          }
+      oses:
+        type: string
+        required: false
+        default: >
+          {
+            "aarch64-linux-android": "ubuntu-latest"
+          }
+
+jobs:
+  android:
+    name: ${{ fromJson(inputs.names)[inputs.target] }}
+    runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine Rust versions
+        id: versions
+        uses: xStrom/ci-test/versions@main
+
+      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ steps.versions.outputs.rust-stable }}
+          targets: ${{ inputs.target }}
+
+      - name: Install cargo-apk
+        run: cargo install cargo-apk
+
+      - name: Run cargo apk check
+        run: cargo apk check ${{ inputs.packages }} --profile ci --target ${{ inputs.target }} --all-features
+        env:
+          RUSTFLAGS: '-D warnings'

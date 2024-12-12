@@ -60,6 +60,15 @@ jobs:
     with:
       target: ${{ matrix.target }}
 
+  android:
+    name: ${{ fromJson('''Android''') }}
+    strategy:
+      matrix:
+        target: [aarch64-linux-android]
+    uses: xStrom/ci-test/.github/workflows/android.yml@main
+    with:
+      target: ${{ matrix.target }}
+
   msrv:
     name: ${{ fromJson('''MSRV''') }}
     strategy:
