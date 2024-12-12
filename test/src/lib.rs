@@ -1,4 +1,4 @@
-//! Test
+//! This is a simple test project so the CI has something to verify.
 
 /// Super cool function.
 pub fn cool() {}
