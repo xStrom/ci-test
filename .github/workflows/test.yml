@@ -1,0 +1,85 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      # Basic inputs
+      target:
+        type: string
+        required: true
+      # Advanced inputs
+      names:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     "Windows x64",
+            "aarch64-pc-windows-msvc":    "Windows ARM64",
+
+            "x86_64-apple-darwin":        "macOS x64",
+            "aarch64-apple-darwin":       "macOS ARM64",
+
+            "x86_64-unknown-linux-gnu":   "Linux x64",
+            "aarch64-unknown-linux-gnu":  "Linux ARM64",
+
+            "x86_64-linux-android":       "Android x64",
+            "aarch64-linux-android":      "Android ARM64",
+            "armv7-linux-androideabi":    "Android ARMv7",
+
+            "x86_64-apple-ios":           "iOS x64",
+            "aarch64-apple-ios":          "iOS ARM64",
+
+            "wasm32-unknown-unknown":     "Wasm"
+          }
+      oses:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     "windows-latest",
+            "aarch64-pc-windows-msvc":    "windows-latest",
+
+            "x86_64-apple-darwin":        "macos-latest",
+            "aarch64-apple-darwin":       "macos-latest",
+
+            "x86_64-unknown-linux-gnu":   "ubuntu-latest",
+            "aarch64-unknown-linux-gnu":  "ubuntu-latest",
+
+            "x86_64-linux-android":       "ubuntu-latest",
+            "aarch64-linux-android":      "ubuntu-latest",
+            "armv7-linux-androideabi":    "ubuntu-latest",
+
+            "x86_64-apple-ios":           "macos-latest",
+            "aarch64-apple-ios":          "macos-latest",
+
+            "wasm32-unknown-unknown":     "ubuntu-latest"
+          }
+
+jobs:
+  clippy:
+    name: ${{ fromJson(inputs.names)[inputs.target] }}
+    runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine Rust versions
+        id: versions
+        uses: xStrom/ci-test/versions@main
+
+      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ steps.versions.outputs.rust-stable }}
+          targets: ${{ inputs.target }}
+
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-nextest
+
+      - name: Run cargo nextest
+        run: cargo nextest run --workspace --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
+
+      - name: Run cargo test --doc
+        run: cargo test --doc --workspace --locked --profile ci --all-features --no-fail-fast
