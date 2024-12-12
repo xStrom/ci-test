@@ -1,0 +1,15 @@
+name: Typos
+
+on:
+  workflow_call:
+
+jobs:
+  formatting:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check typos
+        uses: crate-ci/typos@v1.28.2

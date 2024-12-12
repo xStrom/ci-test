@@ -47,6 +47,10 @@ jobs:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
 
+  typos:
+    name: Typos
+    uses: xStrom/ci-test/.github/workflows/typos.yml@main
+
   clippy:
     name: ${{ fromJson('''Clippy''') }}
     strategy:

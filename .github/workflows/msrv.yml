@@ -28,7 +28,7 @@ on:
           }
 
 jobs:
-  check-msrv:
+  msrv:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
     steps:
