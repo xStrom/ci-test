@@ -22,7 +22,7 @@ runs:
   steps:
     - name: Rust MSRV
       id: rust-msrv
-      if: inputs.rust-msrv == "true"
+      if: inputs.rust-msrv == 'true'
       shell: bash
       run: |
         msrv=$(perl -nle 'print $1 if /^\s*[^#\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)
