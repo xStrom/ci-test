@@ -35,7 +35,7 @@ jobs:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
-      rdme-projects: test
+      rdme-projects: test test test
 
   typos:
     name: Typos
