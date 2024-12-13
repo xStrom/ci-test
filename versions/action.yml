@@ -17,7 +17,7 @@ outputs:
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
   foo:
-    value: ${{ steps.rust-msrv.outputs.version }}
+    value: "HELLO"
 
 runs:
   using: composite
