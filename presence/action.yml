@@ -3,9 +3,8 @@ description: Checks whether debug_assertions is present in Rust code.
 
 outputs:
   debug-assertions:
-    value: ${{ steps.debug-assertions.outputs.present }}
-  foo:
-    value: "HELLOKKKK"
+    #value: ${{ steps.debug-assertions.outputs.present }}
+    value: "WOLO"
 
 runs:
   using: composite
