@@ -34,6 +34,7 @@ jobs:
         uses: xStrom/ci-test/copyright@main
         with:
           project-name: CI .^$*+?()[{\|
+          license: Apa(c)he-2.0 OR MIT
 
       # - name: Install cargo-rdme
       #   if: inputs.rdme-projects != ''
