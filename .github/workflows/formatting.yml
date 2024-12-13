@@ -17,23 +17,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Determine Rust versions
-        id: versions
-        uses: xStrom/ci-test/versions@main
+      # - name: Determine Rust versions
+      #   id: versions
+      #   uses: xStrom/ci-test/versions@main
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ steps.versions.outputs.rust-stable }}
-          components: rustfmt
+      # - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+      #   uses: dtolnay/rust-toolchain@master
+      #   with:
+      #     toolchain: ${{ steps.versions.outputs.rust-stable }}
+      #     components: rustfmt
 
-      - name: Run cargo fmt
-        run: cargo fmt --all --check
+      # - name: Run cargo fmt
+      #   run: cargo fmt --all --check
 
       - name: Install ripgrep
-        run: |
-          sudo apt update
-          sudo apt install ripgrep
+        run: sudo apt install ripgrep
 
       - name: Testing presence
         id: presence
@@ -41,8 +39,7 @@ jobs:
 
       - name: Presence results
         run: |
-          echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug_assertions }}"
-          echo "Another hmm: Z${{ steps.presence.outputs.foo }}Z X${{ steps.presence.outputs.foo-zoo }}X"
+          echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug-assertions }}"
 
       # - name: Check copyright headers
       #   run: bash .github/copyright.sh
@@ -50,17 +47,17 @@ jobs:
       # - name: Check debug_assertions presence
       #   run: bash .github/debug_assertions.sh
 
-      - name: Install cargo-rdme
-        if: inputs.rdme-projects != ''
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-rdme
+      # - name: Install cargo-rdme
+      #   if: inputs.rdme-projects != ''
+      #   uses: taiki-e/install-action@v2
+      #   with:
+      #     tool: cargo-rdme
 
-      - name: Run cargo rdme
-        if: inputs.rdme-projects != ''
-        run: |
-          for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
-            echo "Running cargo rdme on $project ..."
-            cargo rdme --check --heading-base-level=0 --workspace-project=$project
-          done
-          echo "All projects are up to date."
+      # - name: Run cargo rdme
+      #   if: inputs.rdme-projects != ''
+      #   run: |
+      #     for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
+      #       echo "Running cargo rdme on $project ..."
+      #       cargo rdme --check --heading-base-level=0 --workspace-project=$project
+      #     done
+      #     echo "All projects are up to date."

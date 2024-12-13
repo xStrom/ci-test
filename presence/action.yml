@@ -3,12 +3,7 @@ description: Checks whether debug_assertions is present in Rust code.
 
 outputs:
   debug-assertions:
-    #value: ${{ steps.debug-assertions.outputs.present }}
-    value: "WOLO"
-  foo:
-    value: "FOO"
-  foo-zoo:
-    value: "ZOO"
+    value: ${{ steps.debug-assertions.outputs.present }}
 
 runs:
   using: composite
@@ -19,16 +14,17 @@ runs:
     - name: Check for debug_assertions in Rust code
       id: debug-assertions
       shell: bash
-      run: echo "present=foo" >> $GITHUB_OUTPUT
-      # run: |
-      #   rg "debug_assertions" -q -g "*.rs" . || true
-      #   exit_code=$?
-      #   if [ $exit_code -eq 0 ]; then
-      #     echo "present=true" >> $GITHUB_OUTPUT
-      #     echo "Found debug_assertions in Rust code."
-      #     exit 0
-      #   else
-      #     echo "present=false" >> $GITHUB_OUTPUT
-      #     echo "Did not find debug_assertions in Rust code."
-      #     exit 0
-      #   fi
+      run: |
+        set +e
+        rg "debug_assertions" -q -g "*.rs" .
+        exit_code=$?
+        set -e
+        if [ $exit_code -eq 0 ]; then
+          echo "present=true" >> $GITHUB_OUTPUT
+          echo "Found debug_assertions in Rust code."
+          exit 0
+        else
+          echo "present=false" >> $GITHUB_OUTPUT
+          echo "Did not find debug_assertions in Rust code."
+          exit 0
+        fi
