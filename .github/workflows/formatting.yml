@@ -30,11 +30,10 @@ jobs:
       # - name: Run cargo fmt
       #   run: cargo fmt --all --check
 
-      - name: Check copyright headers
-        uses: xStrom/ci-test/copyright@main
-        with:
-          project-name: CI
-          license: Apache-2.0 OR MIT
+      # - name: Check copyright headers
+      #   uses: xStrom/ci-test/copyright@main
+      #   with:
+      #     project-name: CI
 
       # - name: Install cargo-rdme
       #   if: inputs.rdme-projects != ''
@@ -50,3 +49,14 @@ jobs:
       #       cargo rdme --check --heading-base-level=0 --workspace-project=$project
       #     done
       #     echo "All projects are up to date."
+
+      # - name: Install Taplo
+      #   uses: uncenter/setup-taplo@09968a8ae38d66ddd3d23802c44bf6122d7aa991 # v1
+      #   with:
+      #     version: "0.9.3"
+
+      - name: Install Taplo
+        run: sudo brew install taplo
+
+      - name: Run taplo fmt
+        run: taplo fmt --check --diff
