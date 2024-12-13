@@ -2,10 +2,7 @@
 
 /// Super cool function.
 pub fn cool() -> bool {
-    #[cfg(debug_assertions)]
-    return true;
-    #[cfg(not(debug_assertions))]
-    return false;
+    false
 }
 
 #[cfg(test)]
