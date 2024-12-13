@@ -56,7 +56,9 @@ jobs:
       #     version: "0.9.3"
 
       - name: Install Taplo
-        run: /home/linuxbrew/.linuxbrew/bin/brew install taplo
+        run: |
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          /home/linuxbrew/.linuxbrew/bin/brew install taplo
 
       - name: Run taplo fmt
         run: taplo fmt --check --diff
