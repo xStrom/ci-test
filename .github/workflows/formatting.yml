@@ -62,6 +62,10 @@ jobs:
           brew info taplo
           brew --cellar
           brew --cellar taplo
+          echo "First"
+          ls -alF /home/linuxbrew/.linuxbrew/Cellar/taplo
+          echo "Second"
+          ls -alF /home/linuxbrew/.linuxbrew/Cellar/taplo/0.9.3
 
       - name: Run taplo fmt
         run: taplo fmt --check --diff
