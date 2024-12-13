@@ -30,8 +30,8 @@ jobs:
       # - name: Run cargo fmt
       #   run: cargo fmt --all --check
 
-      - name: Install ripgrep
-        run: sudo apt install ripgrep
+      #- name: Install ripgrep
+      #  run: sudo apt install ripgrep
 
       - name: Testing presence
         id: presence
