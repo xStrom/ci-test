@@ -56,7 +56,7 @@ jobs:
       #     version: "0.9.3"
 
       - name: Install Taplo
-        run: cargo install taplo --locked
+        run: cargo install taplo-cli --locked
 
       - name: Run taplo fmt
         run: taplo fmt --check --diff
