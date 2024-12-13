@@ -44,6 +44,7 @@ jobs:
   clippy:
     name: ${{ fromJson('''Clippy''') }}
     strategy:
+      fail-fast: false
       matrix:
         target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
