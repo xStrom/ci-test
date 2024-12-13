@@ -33,7 +33,7 @@ jobs:
       - name: Check copyright headers
         uses: xStrom/ci-test/copyright@main
         with:
-          project-name: CI
+          project-name: CI .^$*+?()[{\|
 
       # - name: Install cargo-rdme
       #   if: inputs.rdme-projects != ''

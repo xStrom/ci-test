@@ -23,9 +23,13 @@ runs:
     - name: Check copyright headers
       shell: bash
       run: |
-        spdx_expression_regex="Apache-2\.0 OR MIT"
+        escape_for_regex() {
+          echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
+        }
+        spdx_expression_regex=$(escape_for_regex "${{ inputs.license }}")
+        project_name_regex=$(escape_for_regex "${{ inputs.project-name }}")
         set +e
-        output=$(rg "^// Copyright (19|20)[\d]{2} (.+ and )?the ${{ inputs.project-name }} Authors( and .+)?$\n^// SPDX-License-Identifier: $spdx_expression_regex$\n\n" --files-without-match --multiline ${{ inputs.globs }} .)
+        output=$(rg "^// Copyright (19|20)[\d]{2} (.+ and )?the $project_name_regex Authors( and .+)?$\n^// SPDX-License-Identifier: $spdx_expression_regex$\n\n" --files-without-match --multiline ${{ inputs.globs }} .)
         set -e
 
         if [ -n "$output" ]; then

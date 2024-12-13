@@ -1,5 +1,5 @@
 // Copyright 2024 the CI Authors
-// SPDX-License-Identifier: Apache-2.0 OR MIT
+// SPDX-License-Identifier: Apa(c)he-2.0 OR MIT
 
 //! This is a simple test project so the CI has something to verify.
 
