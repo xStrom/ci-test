@@ -10,6 +10,13 @@ runs:
   steps:
     #- name: Install ripgrep
     #  run: cargo install ripgrep
+    - name: Install ripgrep
+      run: |
+        if command -v rg >/dev/null 2>&1; then
+          echo "ripgrep is already installed."
+        else
+          echo "ripgrep is not installed."
+        fi
 
     - name: Check for debug_assertions in Rust code
       id: debug-assertions

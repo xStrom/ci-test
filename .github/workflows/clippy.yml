@@ -63,16 +63,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Determine Rust versions
-        id: versions
-        uses: xStrom/ci-test/versions@main
+      - name: Testing presence
+        id: presence
+        uses: xStrom/ci-test/presence@main
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ steps.versions.outputs.rust-stable }}
-          targets: ${{ inputs.target }}
-          components: clippy
+      - name: Presence results
+        run: |
+          echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug-assertions }}"
 
-      - name: Run cargo clippy
-        run: cargo clippy --workspace --locked --profile ci --target ${{ inputs.target }} -- -D warnings
+      # - name: Determine Rust versions
+      #   id: versions
+      #   uses: xStrom/ci-test/versions@main
+
+      # - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+      #   uses: dtolnay/rust-toolchain@master
+      #   with:
+      #     toolchain: ${{ steps.versions.outputs.rust-stable }}
+      #     targets: ${{ inputs.target }}
+      #     components: clippy
+
+      # - name: Run cargo clippy
+      #   run: cargo clippy --workspace --locked --profile ci --target ${{ inputs.target }} -- -D warnings
