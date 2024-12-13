@@ -5,6 +5,10 @@ outputs:
   debug-assertions:
     #value: ${{ steps.debug-assertions.outputs.present }}
     value: "WOLO"
+  foo:
+    value: "FOO"
+  foo-zoo:
+    value: "ZOO"
 
 runs:
   using: composite
