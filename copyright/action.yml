@@ -12,7 +12,7 @@ inputs:
   globs:
     description: The files to include and exclude.
     required: false
-    default: -g "*.rs"
+    default: -g '*.rs'
 
 runs:
   using: composite
@@ -23,6 +23,7 @@ runs:
     - name: Check copyright headers
       shell: bash
       run: |
+        # Check copyright headers
         escape_for_regex() {
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
@@ -30,6 +31,7 @@ runs:
         project_name_regex=$(escape_for_regex '${{ inputs.project-name }}')
         header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $project_name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
         echo "Copyright header regex: $header_regex"
+
         set +e
         output=$(rg "$header_regex" --files-without-match --multiline ${{ inputs.globs }} .)
         set -e
