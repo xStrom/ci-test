@@ -60,6 +60,8 @@ jobs:
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install taplo
           brew info taplo
+          brew --cellar
+          brew --cellar taplo
 
       - name: Run taplo fmt
         run: taplo fmt --check --diff
