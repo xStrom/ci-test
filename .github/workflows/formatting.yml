@@ -42,6 +42,7 @@ jobs:
       - name: Presence results
         run: |
           echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug_assertions }}"
+          echo "Another hmm: ${{ steps.versions.outputs.debug_assertions }} ${{ steps.versions.outputs.rust-stable }}"
 
       # - name: Check copyright headers
       #   run: bash .github/copyright.sh

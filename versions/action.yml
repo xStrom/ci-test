@@ -16,6 +16,8 @@ outputs:
     value: "1.82" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
+  debug-assertions:
+    value: ${{ steps.rust-msrv.outputs.version }}
 
 runs:
   using: composite
