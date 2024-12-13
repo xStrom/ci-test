@@ -11,6 +11,7 @@ runs:
     #- name: Install ripgrep
     #  run: cargo install ripgrep
     - name: Install ripgrep
+      shell: bash
       run: |
         if command -v rg >/dev/null 2>&1; then
           echo "ripgrep is already installed."
