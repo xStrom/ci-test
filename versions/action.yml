@@ -20,11 +20,12 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Rust MSRV
+    - name: Determine MSRV
       id: rust-msrv
       if: inputs.rust-msrv == 'true'
       shell: bash
       run: |
+        # Determine MSRV
         msrv=$(perl -nle 'print $1 if /^\s*[^#\w]*rust-version[^\w]*\s*=\s*[^\w]+([\d\.]+)[^\w]+/' Cargo.toml)
         if [ -z "$msrv" ]; then
           echo "No rust-version found in the workspace Cargo.toml file."

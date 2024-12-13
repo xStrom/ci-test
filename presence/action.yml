@@ -12,6 +12,7 @@ runs:
       id: debug-assertions
       shell: bash
       run: |
+        # Check for debug_assertions in Rust code
         grep --version
         set +e
         grep -qr --include="*.rs" "debug_assertions" .
