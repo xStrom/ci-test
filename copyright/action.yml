@@ -36,8 +36,8 @@ runs:
           echo -e "The following files lack the correct copyright header:\n"
           echo $output
           echo -e "\n\nPlease add the following header:\n"
-          echo "// Copyright $(date +%Y) the ${{ inputs.project-name }} Authors"
-          echo "// SPDX-License-Identifier: ${{ inputs.license }}"
+          echo '// Copyright $(date +%Y) the ${{ inputs.project-name }} Authors'
+          echo '// SPDX-License-Identifier: ${{ inputs.license }}'
           echo -e "\n... rest of the file ...\n"
           exit 1
         fi
