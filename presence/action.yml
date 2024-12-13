@@ -8,15 +8,24 @@ outputs:
 runs:
   using: composite
   steps:
-    #- name: Install ripgrep
-    #  run: cargo install ripgrep
     - name: Install ripgrep
       shell: bash
       run: |
         if command -v rg >/dev/null 2>&1; then
-          echo "ripgrep is already installed."
+          echo "Found ripgrep already installed."
         else
-          echo "ripgrep is not installed."
+          echo "Installing ripgrep ..."
+          case $RUNNER_OS in
+            Windows)
+              choco install ripgrep
+              ;;
+            macOS)
+              brew install ripgrep
+              ;;
+            Linux)
+              sudo apt install ripgrep
+              ;;
+          esac
         fi
 
     - name: Check for debug_assertions in Rust code
