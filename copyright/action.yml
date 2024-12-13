@@ -1,0 +1,40 @@
+name: Copyright
+description: Checks whether the correct copyright headers are present.
+
+inputs:
+  project-name:
+    description: The name in the phrase "the $name Authors".
+    required: true
+  license:
+    description: The SPDX license expression.
+    required: false
+    default: Apache-2.0 OR MIT
+  globs:
+    description: The files to include and exclude.
+    required: false
+    default: -g "*.rs"
+
+runs:
+  using: composite
+  steps:
+    - name: Install ripgrep
+      uses: xStrom/ci-test/install@main
+
+    - name: Check copyright headers
+      shell: bash
+      run: |
+        spdx_expression_regex="Apache-2\.0 OR MIT"
+        output=$(rg "^// Copyright (19|20)[\d]{2} (.+ and )?the ${{ inputs.project-name }} Authors( and .+)?$\n^// SPDX-License-Identifier: $spdx_expression_regex$\n\n" --files-without-match --multiline ${{ inputs.globs }} .)
+
+        if [ -n "$output" ]; then
+          echo -e "The following files lack the correct copyright header:\n"
+          echo $output
+          echo -e "\n\nPlease add the following header:\n"
+          echo "// Copyright $(date +%Y) the ${{ inputs.project-name }} Authors"
+          echo "// SPDX-License-Identifier: ${{ inputs.license }}"
+          echo -e "\n... rest of the file ...\n"
+          exit 1
+        fi
+
+        echo "All files have correct copyright headers."
+        exit 0
