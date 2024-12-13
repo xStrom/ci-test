@@ -26,8 +26,8 @@ runs:
         escape_for_regex() {
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
-        spdx_expression_regex=$(escape_for_regex "${{ inputs.license }}")
-        project_name_regex=$(escape_for_regex "${{ inputs.project-name }}")
+        spdx_expression_regex=$(escape_for_regex '${{ inputs.license }}')
+        project_name_regex=$(escape_for_regex '${{ inputs.project-name }}')
         echo "SPDX expression regex: $spdx_expression_regex"
         echo "Project name regex: $project_name_regex"
         set +e
