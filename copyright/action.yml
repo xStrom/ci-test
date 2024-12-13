@@ -24,7 +24,9 @@ runs:
       shell: bash
       run: |
         spdx_expression_regex="Apache-2\.0 OR MIT"
+        set +e
         output=$(rg "^// Copyright (19|20)[\d]{2} (.+ and )?the ${{ inputs.project-name }} Authors( and .+)?$\n^// SPDX-License-Identifier: $spdx_expression_regex$\n\n" --files-without-match --multiline ${{ inputs.globs }} .)
+        set -e
 
         if [ -n "$output" ]; then
           echo -e "The following files lack the correct copyright header:\n"
