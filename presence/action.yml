@@ -15,6 +15,7 @@ runs:
       id: debug-assertions
       shell: bash
       run: |
+        rg --version
         set +e
         rg "debug_assertions" -q -g "*.rs" .
         exit_code=$?
