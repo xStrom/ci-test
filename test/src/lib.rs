@@ -1,7 +1,12 @@
 //! This is a simple test project so the CI has something to verify.
 
 /// Super cool function.
-pub fn cool() {}
+pub fn cool() -> bool {
+    #[cfg(debug_assertions)]
+    return true;
+    #[cfg(not(debug_assertions))]
+    return false;
+}
 
 #[cfg(test)]
 mod tests {
