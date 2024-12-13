@@ -65,4 +65,4 @@ jobs:
           ls -alF /home/linuxbrew/.linuxbrew/Cellar/taplo/0.9.3/bin
 
       - name: Run taplo fmt
-        run: taplo fmt --check --diff
+        run: /home/linuxbrew/.linuxbrew/Cellar/taplo/0.9.3/bin/taplo fmt --check --diff
