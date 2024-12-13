@@ -1,0 +1,25 @@
+name: Install
+description: Install ripgrep.
+
+runs:
+  using: composite
+  steps:
+    - name: Install ripgrep
+      shell: bash
+      run: |
+        if command -v rg >/dev/null 2>&1; then
+          echo "Found ripgrep already installed."
+        else
+          echo "Installing ripgrep ..."
+          case $RUNNER_OS in
+            Windows)
+              choco install ripgrep
+              ;;
+            macOS)
+              brew install ripgrep
+              ;;
+            Linux)
+              sudo apt install ripgrep
+              ;;
+          esac
+        fi
