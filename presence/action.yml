@@ -28,7 +28,7 @@ runs:
           esac
         fi
 
-   - name: Install ripgrep again
+    - name: Install ripgrep again
       shell: bash
       run: |
         if command -v rg >/dev/null 2>&1; then
