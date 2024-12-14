@@ -22,12 +22,12 @@ inputs:
     #   {
     #     "name":    "Cool",
     #     "license": "Apache-2.0 OR MIT",
-    #     "globs":   "-g '*.rs' -g '!other'"
+    #     "globs":   ["*.rs", "!other/"]
     #   },
     #   {
     #     "name":    "Cool",
     #     "license": "BSD",
-    #     "globs":   "-g 'other/**/*.rs'"
+    #     "globs":   ["other/**/*.rs"]
     #   }
     # ]
     description: Advanced configuration in a single JSON array, overrides basic inputs.
@@ -40,6 +40,14 @@ runs:
     - name: Install ripgrep
       uses: xStrom/ci-test/install@main
 
+    - name: Verify tools as executable
+      shell: bash
+      run: |
+        # Verify tools as executable
+        rg --version
+        jq --version
+        perl --version
+
     - name: Check copyright headers
       shell: bash
       env:
@@ -49,11 +57,11 @@ runs:
         ARG_CONFIG: ${{ inputs.config }}
       run: |
         # Check copyright headers
+        all_ok=1
+
         escape_for_regex() {
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
-
-        all_ok=1
 
         check_headers() {
           local name=$1
@@ -86,10 +94,8 @@ runs:
           fi
         }
 
-        # TODO: Confirm that jq and every other used app exists in all scripts
-
         if [ -n "$ARG_CONFIG" ]; then
-          while IFS= read -r cfg; do 
+          while IFS= read -r cfg; do
             name=$(echo "$cfg" | jq -r '.name')
             license=$(echo "$cfg" | jq -r '.license')
             readarray -t globs <<< "$(echo "$cfg" | jq -r '.globs[]')"
@@ -100,7 +106,7 @@ runs:
         fi
 
         if [ "$all_ok" -eq 1 ]; then
-          echo "All files have correct copyright headers. Because $all_ok yeah."
+          echo "All files have correct copyright headers."
         else
           exit 1
         fi

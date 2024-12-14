@@ -31,12 +31,12 @@ on:
         #   {
         #     "name":    "Cool",
         #     "license": "Apache-2.0 OR MIT",
-        #     "globs":   "-g '*.rs' -g '!other'"
+        #     "globs":   ["*.rs", "!other/"]
         #   },
         #   {
         #     "name":    "Cool",
         #     "license": "BSD",
-        #     "globs":   "-g 'other/**/*.rs'"
+        #     "globs":   ["other/**/*.rs"]
         #   }
         # ]
         description: Advanced configuration in a single JSON array, overrides basic inputs.
