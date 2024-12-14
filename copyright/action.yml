@@ -44,8 +44,8 @@ runs:
       shell: bash
       run: |
         # Verify tools as executable
-        rg --version
         jq --version
+        rg --version
         perl --version
 
     - name: Check copyright headers
