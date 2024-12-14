@@ -87,11 +87,11 @@ runs:
           set -e
 
           if [ -n "$output" ]; then
-            echo -e "$redThe following files lack the correct copyright header:$cend\n"
+            echo -e "$red""The following files lack the correct copyright header:$cend\n"
             echo $output
             echo -e "\nPlease add the following header:\n"
-            echo -e "$green// Copyright $(date +%Y) the $name Authors$cend"
-            echo -e "// SPDX-License-Identifier:$green $spdx_expression$cend"
+            echo -e "$green""// Copyright $(date +%Y) the $name Authors$cend"
+            echo -e "$green""// SPDX-License-Identifier: $spdx_expression$cend"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
