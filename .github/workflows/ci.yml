@@ -39,9 +39,9 @@ jobs:
       copyright-config: >
         [
           {
-            "name":    "CI's \"cool\" .^$*+?()[{\| $?",
+            "name":    "CI's \"cool\" .^$*+?()[{\\| $?",
             "license": "Apache-2.0 OR MIT",
-            "globs":   ["*.rs", "!with space/"]
+            "globs":   ["*.rs", "!with spaces/"]
           },
           {
             "name":    "Cool",
