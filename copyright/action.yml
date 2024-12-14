@@ -62,6 +62,7 @@ runs:
 
           set +e
           output=$(rg "$header_regex" --files-without-match --multiline $3 .)
+          rg "$header_regex" --files-without-match --multiline $3 .
           set -e
 
           if [ -n "$output" ]; then
