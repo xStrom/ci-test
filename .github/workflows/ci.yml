@@ -35,6 +35,17 @@ jobs:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
+      copyright: >
+        [ 
+          {
+            "name":     "CI"
+          },
+          {
+            "name":     "Foobar",
+            "license":  "BSD",
+            "globs":    "-g '*.rs' -g 'foobar.rs'"
+          }
+        ]
       rdme-projects: test
 
   typos:

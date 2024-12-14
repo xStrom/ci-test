@@ -2,9 +2,11 @@ name: Copyright
 description: Checks whether the correct copyright headers are present.
 
 inputs:
-  project-name:
+  # Basic inputs
+  name:
     description: The name in the phrase "the $name Authors".
-    required: true
+    required: false
+    default: ""
   license:
     description: The SPDX license expression.
     required: false
@@ -13,6 +15,13 @@ inputs:
     description: The files to include and exclude.
     required: false
     default: -g '*.rs'
+  # Advanced inputs
+  config:
+    description: Advanced configuration in a single JSON array, overrides basic inputs.
+    required: false
+    default: ""
+
+# TODO: Add support for the advanced config -- but potentially consider keeping the simpler inputs too just so the action is more fancy.
 
 runs:
   using: composite
@@ -27,24 +36,29 @@ runs:
         escape_for_regex() {
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
-        spdx_expression_regex=$(escape_for_regex '${{ inputs.license }}')
-        project_name_regex=$(escape_for_regex '${{ inputs.project-name }}')
-        header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $project_name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
-        echo "Copyright header regex: $header_regex"
 
-        set +e
-        output=$(rg "$header_regex" --files-without-match --multiline ${{ inputs.globs }} .)
-        set -e
+        check_headers() {
+          name_regex=$(escape_for_regex "$1")
+          spdx_expression_regex=$(escape_for_regex "$2")
+          header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
+          echo "Checking headers with regex: $header_regex"
+          echo "In the following locations: $3"
 
-        if [ -n "$output" ]; then
-          echo -e "The following files lack the correct copyright header:\n"
-          echo $output
-          echo -e "\n\nPlease add the following header:\n"
-          echo "// Copyright $(date +%Y) the $(echo '${{ inputs.project-name }}') Authors"
-          echo '// SPDX-License-Identifier: ${{ inputs.license }}'
-          echo -e "\n... rest of the file ...\n"
-          exit 1
-        fi
+          set +e
+          output=$(rg "$header_regex" --files-without-match --multiline $3 .)
+          set -e
 
-        echo "All files have correct copyright headers."
-        exit 0
+          if [ -n "$output" ]; then
+            echo -e "The following files lack the correct copyright header:\n"
+            echo $output
+            echo -e "\n\nPlease add the following header:\n"
+            echo "// Copyright $(date +%Y) the $1 Authors"
+            echo "// SPDX-License-Identifier: $2"
+            echo -e "\n... rest of the file ...\n"
+            exit 1
+          fi
+
+          echo "All files have correct copyright headers."
+        }
+
+        check_headers '${{ inputs.name }}' '${{ inputs.license }}' '${{ inputs.globs }}'

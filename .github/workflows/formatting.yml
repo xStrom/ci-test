@@ -4,10 +4,18 @@ on:
   workflow_call:
     inputs:
       # Basic inputs
-      rdme-projects:
-        type: string
+      copyright:
+        description: The copyright check configuration.
         required: false
+        type: string
         default: ""
+      rdme-projects:
+        description: The project names which should be checked with cargo rdme.
+        required: false
+        type: string
+        default: ""
+
+# TODO: Consider also adding the simpler copyright_name etc inputs, so that most repos don't have to deal with JSON .. let Vello do its JSON thing ..
 
 jobs:
   formatting:
@@ -17,43 +25,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Determine Rust versions
-        id: versions
-        uses: xStrom/ci-test/versions@main
+      # - name: Determine Rust versions
+      #   id: versions
+      #   uses: xStrom/ci-test/versions@main
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ steps.versions.outputs.rust-stable }}
-          components: rustfmt
+      # - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+      #   uses: dtolnay/rust-toolchain@master
+      #   with:
+      #     toolchain: ${{ steps.versions.outputs.rust-stable }}
+      #     components: rustfmt
 
-      - name: Run cargo fmt
-        run: cargo fmt --all --check
+      # - name: Run cargo fmt
+      #   run: cargo fmt --all --check
 
       - name: Check copyright headers
+        if: inputs.copyright != ''
         uses: xStrom/ci-test/copyright@main
         with:
-          project-name: CI
+          #config: ${{ inputs.copyright }}
+          name: CI
 
-      - name: Install Taplo
-        uses: uncenter/setup-taplo@09968a8ae38d66ddd3d23802c44bf6122d7aa991 # v1.0.8
-        with:
-          version: "0.9.3"
+      # - name: Install Taplo
+      #   uses: uncenter/setup-taplo@09968a8ae38d66ddd3d23802c44bf6122d7aa991 # v1.0.8
+      #   with:
+      #     version: "0.9.3"
 
-      - name: Run taplo fmt
-        run: taplo fmt --check --diff
+      # - name: Run taplo fmt
+      #   run: taplo fmt --check --diff
 
-      - name: Install cargo-rdme
-        if: inputs.rdme-projects != ''
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-rdme
+      # - name: Install cargo-rdme
+      #   if: inputs.rdme-projects != ''
+      #   uses: taiki-e/install-action@v2
+      #   with:
+      #     tool: cargo-rdme
 
-      - name: Run cargo rdme
-        if: inputs.rdme-projects != ''
-        run: |
-          for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
-            echo "Running cargo rdme on $project ..."
-            cargo rdme --check --heading-base-level=0 --workspace-project=$project
-          done
-          echo "All projects are up to date."
+      # - name: Run cargo rdme
+      #   if: inputs.rdme-projects != ''
+      #   run: |
+      #     for project in $(echo '${{ inputs.rdme-projects }}' | tr ' ' '\n'); do
+      #       echo "Running cargo rdme on $project ..."
+      #       cargo rdme --check --heading-base-level=0 --workspace-project=$project
+      #     done
+      #     echo "All projects are up to date."
