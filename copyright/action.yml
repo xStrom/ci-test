@@ -31,6 +31,8 @@ runs:
 
     - name: Check copyright headers
       shell: bash
+      env:
+        COPYRIGHT_NAME: ${{ inputs.name }}
       run: |
         # Check copyright headers
         escape_for_regex() {
@@ -61,4 +63,4 @@ runs:
           echo "All files have correct copyright headers."
         }
 
-        check_headers '${{ inputs.name }}' '${{ inputs.license }}' '${{ inputs.globs }}'
+        check_headers "$COPYRIGHT_NAME" '${{ inputs.license }}' '${{ inputs.globs }}'
