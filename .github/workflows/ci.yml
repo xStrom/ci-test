@@ -36,10 +36,11 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
       #copyright-name: CI's "cool" .^$*+?()[{\| $?
+      #            "name":    "CI's \"cool\" .^$*+?()[{\| $?",
       copyright-config: >
         [
           {
-            "name":    "CI's \"cool\" .^$*+?()[{\| $?",
+            "name":    "foo",
             "license": "Apache-2.0 OR MIT",
             "globs":   ["*.rs", "!with space/"]
           },
