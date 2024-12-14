@@ -53,9 +53,13 @@ runs:
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
 
+        all_ok=true
+
         check_headers() {
-          local name_regex=$(escape_for_regex "$1")
-          local spdx_expression_regex=$(escape_for_regex "$2")
+          local name=$1
+          local name_regex=$(escape_for_regex "$name")
+          local spdx_expression=$2
+          local spdx_expression_regex=$(escape_for_regex "$spdx_expression")
           local header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
           echo "Checking headers with regex: $header_regex"
 
@@ -75,13 +79,11 @@ runs:
             echo -e "The following files lack the correct copyright header:\n"
             echo $output
             echo -e "\n\nPlease add the following header:\n"
-            echo "// Copyright $(date +%Y) the $1 Authors"
-            echo "// SPDX-License-Identifier: $2"
+            echo "// Copyright $(date +%Y) the $name Authors"
+            echo "// SPDX-License-Identifier: $spdx_expression"
             echo -e "\n... rest of the file ...\n"
-            exit 1
+            all_ok=false
           fi
-
-          echo "All files have correct copyright headers."
         }
 
         # TODO: Confirm that jq and every other used app exists in all scripts
@@ -95,4 +97,10 @@ runs:
           done
         else
           check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOB"
+        fi
+
+        if [ "$all_ok" = true ]; then
+          echo "All files have correct copyright headers."
+        else
+          exit 1
         fi
