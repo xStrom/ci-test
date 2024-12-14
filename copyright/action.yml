@@ -11,10 +11,10 @@ inputs:
     description: The SPDX license expression.
     required: false
     default: Apache-2.0 OR MIT
-  globs:
-    description: The files to include and exclude.
+  glob:
+    description: The files to include.
     required: false
-    default: -g '*.rs'
+    default: "*.rs"
   # Advanced inputs
   config:
     # Expected input JSON format:
@@ -45,7 +45,7 @@ runs:
       env:
         ARG_NAME: ${{ inputs.name }}
         ARG_LICENSE: ${{ inputs.license }}
-        ARG_GLOBS: ${{ inputs.globs }}
+        ARG_GLOB: ${{ inputs.glob }}
         ARG_CONFIG: ${{ inputs.config }}
       run: |
         # Check copyright headers
@@ -54,15 +54,21 @@ runs:
         }
 
         check_headers() {
-          name_regex=$(escape_for_regex "$1")
-          spdx_expression_regex=$(escape_for_regex "$2")
-          header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
+          local name_regex=$(escape_for_regex "$1")
+          local spdx_expression_regex=$(escape_for_regex "$2")
+          local header_regex="^// Copyright (19|20)[\d]{2} (.+ and )?the $name_regex Authors( and .+)?\$\n^// SPDX-License-Identifier: $spdx_expression_regex\$\n\n"
           echo "Checking headers with regex: $header_regex"
-          echo "In the following locations: $3"
+
+          shift 2
+          local globs=("$@")
+          local glob_args=()
+          for glob in "${globs[@]}"; do
+            glob_args+=('-g' "$glob")
+          done
+          echo "In the following locations: ${glob_args[@]}"
 
           set +e
-          output=$(rg "$header_regex" --files-without-match --multiline -g 'copyright/**/*.yml' .)
-          rg "$header_regex" --files-without-match --multiline $3 .
+          local output=$(rg "$header_regex" --files-without-match --multiline "${glob_args[@]}" .)
           set -e
 
           if [ -n "$output" ]; then
@@ -84,9 +90,9 @@ runs:
           echo "$ARG_CONFIG" | jq -c '.[]' | while IFS= read -r cfg; do
             name=$(echo "$cfg" | jq -r '.name')
             license=$(echo "$cfg" | jq -r '.license')
-            globs=$(echo "$cfg" | jq -r '.globs')
-            check_headers "$name" "$license" "$globs"
+            readarray -t globs <<< "$(echo "$cfg" | jq -r '.globs[]')"
+            check_headers "$name" "$license" "${globs[@]}"
           done
         else
-          check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOBS"
+          check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOB"
         fi

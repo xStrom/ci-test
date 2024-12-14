@@ -19,11 +19,11 @@ on:
         required: false
         type: string
         default: Apache-2.0 OR MIT
-      copyright-globs:
-        description: The files to include and exclude.
+      copyright-glob:
+        description: The files to include.
         required: false
         type: string
-        default: -g '*.rs'
+        default: "*.rs"
       # Advanced inputs
       copyright-config:
         # Expected input JSON format:
@@ -71,7 +71,7 @@ jobs:
         with:
           name: ${{ inputs.copyright-name }}
           license: ${{ inputs.copyright-license }}
-          globs: ${{ inputs.copyright-globs }}
+          glob: ${{ inputs.copyright-glob }}
           config: ${{ inputs.copyright-config }}
 
       # - name: Install Taplo
