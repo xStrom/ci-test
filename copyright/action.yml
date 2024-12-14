@@ -79,8 +79,8 @@ runs:
             echo -e "\e[31mThe following files lack the correct copyright header:\e[0m\n"
             echo $output
             echo -e "\nPlease add the following header:\n"
-            echo -e "\e[32m// Copyright $(date +%Y) the $name Authors"
-            echo -e "// SPDX-License-Identifier: $spdx_expression\e[0m"
+            echo -e "\e[32m// Copyright $(date +%Y) the $name Authors\e[0m"
+            echo -e "\e[32m// SPDX-License-Identifier: $spdx_expression\e[0m"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
@@ -89,12 +89,12 @@ runs:
         # TODO: Confirm that jq and every other used app exists in all scripts
 
         if [ -n "$ARG_CONFIG" ]; then
-          echo "$ARG_CONFIG" | jq -c '.[]' | while IFS= read -r cfg; do
+          while IFS= read -r cfg; do 
             name=$(echo "$cfg" | jq -r '.name')
             license=$(echo "$cfg" | jq -r '.license')
             readarray -t globs <<< "$(echo "$cfg" | jq -r '.globs[]')"
             check_headers "$name" "$license" "${globs[@]}"
-          done
+          done < <(echo "$ARG_CONFIG" | jq -c '.[]')
         else
           check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOB"
         fi
