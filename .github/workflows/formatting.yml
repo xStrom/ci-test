@@ -4,18 +4,45 @@ on:
   workflow_call:
     inputs:
       # Basic inputs
-      copyright:
-        description: The copyright check configuration.
-        required: false
-        type: string
-        default: ""
       rdme-projects:
         description: The project names which should be checked with cargo rdme.
         required: false
         type: string
         default: ""
-
-# TODO: Consider also adding the simpler copyright_name etc inputs, so that most repos don't have to deal with JSON .. let Vello do its JSON thing ..
+      copyright-name:
+        description: The name in the phrase "the $name Authors".
+        required: false
+        type: string
+        default: ""
+      copyright-license:
+        description: The SPDX license expression.
+        required: false
+        type: string
+        default: Apache-2.0 OR MIT
+      copyright-globs:
+        description: The files to include and exclude.
+        required: false
+        type: string
+        default: -g '*.rs'
+      # Advanced inputs
+      copyright-config:
+        # Expected input JSON format:
+        # [
+        #   {
+        #     "name":    "Cool",
+        #     "license": "Apache-2.0 OR MIT",
+        #     "globs":   "-g '*.rs' -g '!other'"
+        #   },
+        #   {
+        #     "name":    "Cool",
+        #     "license": "BSD",
+        #     "globs":   "-g 'other/**/*.rs'"
+        #   }
+        # ]
+        description: Advanced configuration in a single JSON array, overrides basic inputs.
+        required: false
+        type: string
+        default: ""
 
 jobs:
   formatting:
@@ -39,11 +66,13 @@ jobs:
       #   run: cargo fmt --all --check
 
       - name: Check copyright headers
-        if: inputs.copyright != ''
+        if: inputs.copyright-name != '' || inputs.copyright-config != ''
         uses: xStrom/ci-test/copyright@main
         with:
-          #config: ${{ inputs.copyright }}
-          name: CI's "cool" .^$*+?()[{\| $?
+          name: ${{ inputs.copyright-name }}
+          license: ${{ inputs.copyright-license }}
+          globs: ${{ inputs.copyright-globs }}
+          config: ${{ inputs.copyright-config }}
 
       # - name: Install Taplo
       #   uses: uncenter/setup-taplo@09968a8ae38d66ddd3d23802c44bf6122d7aa991 # v1.0.8

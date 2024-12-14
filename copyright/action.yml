@@ -34,8 +34,6 @@ inputs:
     required: false
     default: ""
 
-# TODO: Add support for the advanced config -- but potentially consider keeping the simpler inputs too just so the action is more fancy.
-
 runs:
   using: composite
   steps:
