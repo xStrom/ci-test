@@ -53,7 +53,7 @@ runs:
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
         }
 
-        all_ok=true
+        all_ok=1
 
         check_headers() {
           local name=$1
@@ -78,11 +78,11 @@ runs:
           if [ -n "$output" ]; then
             echo -e "The following files lack the correct copyright header:\n"
             echo $output
-            echo -e "\n\nPlease add the following header:\n"
+            echo -e "\nPlease add the following header:\n"
             echo "// Copyright $(date +%Y) the $name Authors"
             echo "// SPDX-License-Identifier: $spdx_expression"
             echo -e "\n... rest of the file ...\n"
-            all_ok=false
+            all_ok=0
           fi
         }
 
@@ -99,7 +99,7 @@ runs:
           check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOB"
         fi
 
-        if [ "$all_ok" = true ]; then
+        if [ "$all_ok" -eq 1 ]; then
           echo "All files have correct copyright headers."
         else
           exit 1
