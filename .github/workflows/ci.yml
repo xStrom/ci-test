@@ -36,14 +36,16 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
       copyright: >
-        [ 
+        [
           {
-            "name":     "CI"
+            "name":    "Cool",
+            "license": "Apache-2.0 OR MIT",
+            "globs":   "-g '*.rs' -g '!other'"
           },
           {
-            "name":     "Foobar",
-            "license":  "BSD",
-            "globs":    "-g '*.rs' -g 'foobar.rs'"
+            "name":    "Cool",
+            "license": "BSD",
+            "globs":   "-g 'other/**/*.rs'"
           }
         ]
       rdme-projects: test

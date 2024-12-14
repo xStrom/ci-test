@@ -17,6 +17,19 @@ inputs:
     default: -g '*.rs'
   # Advanced inputs
   config:
+    # Expected input JSON format:
+    # [
+    #   {
+    #     "name":    "Cool",
+    #     "license": "Apache-2.0 OR MIT",
+    #     "globs":   "-g '*.rs' -g '!other'"
+    #   },
+    #   {
+    #     "name":    "Cool",
+    #     "license": "BSD",
+    #     "globs":   "-g 'other/**/*.rs'"
+    #   }
+    # ]
     description: Advanced configuration in a single JSON array, overrides basic inputs.
     required: false
     default: ""
@@ -66,4 +79,15 @@ runs:
           echo "All files have correct copyright headers."
         }
 
-        check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOBS"
+        # TODO: Confirm that jq and every other used app exists in all scripts
+
+        if [ -n "$ARG_CONFIG" ]; then
+          echo "$ARG_CONFIG" | jq -c '.[]' | while IFS= read -r cfg; do
+            name=$(echo "$cfg" | jq -r '.name')
+            license=$(echo "$cfg" | jq -r '.license')
+            globs=$(echo "$cfg" | jq -r '.globs')
+            check_headers "$name" "$license" "$globs"
+          done
+        else
+          check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOBS"
+        fi
