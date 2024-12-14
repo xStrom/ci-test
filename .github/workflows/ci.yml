@@ -41,12 +41,12 @@ jobs:
           {
             "name":    "Cool",
             "license": "Apache-2.0 OR MIT",
-            "globs":   "-g '*.yml' -g '!.github'"
+            "globs":   "-g '*.yml' -g '!copyright/'"
           },
           {
             "name":    "Cool",
             "license": "BSD",
-            "globs":   "-g '.github/**/*.yml'"
+            "globs":   "-g 'copyright/**/*.yml'"
           }
         ]
       rdme-projects: test
