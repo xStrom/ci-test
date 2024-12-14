@@ -98,12 +98,13 @@ runs:
         }
 
         if [ -n "$ARG_CONFIG" ]; then
+          json_lines=$(echo "$ARG_CONFIG" | jq -c '.[]')
           while IFS= read -r cfg; do
             name=$(echo "$cfg" | jq -r '.name')
             license=$(echo "$cfg" | jq -r '.license')
             readarray -t globs <<< "$(echo "$cfg" | jq -r '.globs[]')"
             check_headers "$name" "$license" "${globs[@]}"
-          done < <(echo "$ARG_CONFIG" | jq -c '.[]')
+          done < <(echo "$json_lines")
         else
           check_headers "$ARG_NAME" "$ARG_LICENSE" "$ARG_GLOB"
         fi
