@@ -58,6 +58,9 @@ runs:
       run: |
         # Check copyright headers
         all_ok=1
+        green="\e[32m"
+        red="\e[31m"
+        cend="\e[0m"
 
         escape_for_regex() {
           echo "$1" | perl -pe 's/([.\^\$*+?()[\]{}\\])/\\$1/g'
@@ -84,11 +87,11 @@ runs:
           set -e
 
           if [ -n "$output" ]; then
-            echo -e "\e[31mThe following files lack the correct copyright header:\e[0m\n"
+            echo -e "$redThe following files lack the correct copyright header:$cend\n"
             echo $output
             echo -e "\nPlease add the following header:\n"
-            echo -e "\e[32m// Copyright $(date +%Y) the $name Authors\e[0m"
-            echo -e "\e[32m// SPDX-License-Identifier: $spdx_expression\e[0m"
+            echo -e "$green// Copyright $(date +%Y) the $name Authors$cend"
+            echo -e "$green// SPDX-License-Identifier: $spdx_expression$cend"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
@@ -106,7 +109,7 @@ runs:
         fi
 
         if [ "$all_ok" -eq 1 ]; then
-          echo "All files have correct copyright headers."
+          echo -e "$greenAll files have correct copyright headers.$cend"
         else
           exit 1
         fi
