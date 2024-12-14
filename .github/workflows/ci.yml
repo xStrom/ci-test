@@ -39,14 +39,14 @@ jobs:
       copyright-config: >
         [
           {
-            "name":    "Cool",
+            "name":    "CI's \"cool\" .^$*+?()[{\| $?",
             "license": "Apache-2.0 OR MIT",
-            "globs":   ["*.yml", "!copyright/"]
+            "globs":   ["*.rs", "!with space/"]
           },
           {
             "name":    "Cool",
             "license": "BSD",
-            "globs":   ["copyright/**/*.yml"]
+            "globs":   ["with space/**/*.rs"]
           }
         ]
       rdme-projects: test
