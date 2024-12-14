@@ -35,20 +35,20 @@ jobs:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
-      copyright-name: CI's "cool" .^$*+?()[{\| $?
-      # copyright-config: >
-      #   [
-      #     {
-      #       "name":    "Cool",
-      #       "license": "Apache-2.0 OR MIT",
-      #       "globs":   ["*.yml", "!copyright/"]
-      #     },
-      #     {
-      #       "name":    "Cool",
-      #       "license": "BSD",
-      #       "globs":   ["copyright/**/*.yml"]
-      #     }
-      #   ]
+      #copyright-name: CI's "cool" .^$*+?()[{\| $?
+      copyright-config: >
+        [
+          {
+            "name":    "Cool",
+            "license": "Apache-2.0 OR MIT",
+            "globs":   ["*.yml", "!copyright/"]
+          },
+          {
+            "name":    "Cool",
+            "license": "BSD",
+            "globs":   ["copyright/**/*.yml"]
+          }
+        ]
       rdme-projects: test
 
   typos:
