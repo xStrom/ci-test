@@ -90,8 +90,8 @@ runs:
             echo -e "$red""The following files lack the correct copyright header:$cend\n"
             echo $output
             echo -e "\nPlease add the following header:\n"
-            echo -e "$green""// Copyright $(date +%Y) the $name Authors$cend"
-            echo -e "$green""// SPDX-License-Identifier: $spdx_expression$cend"
+            printf "${green}// Copyright %s the %s Authors${cend}\n" "$(date +%Y)" "$name"
+            printf "${green}// SPDX-License-Identifier: %s${cend}\n" "$spdx_expression"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
