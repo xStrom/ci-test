@@ -76,11 +76,11 @@ runs:
           set -e
 
           if [ -n "$output" ]; then
-            echo -e "The following files lack the correct copyright header:\n"
+            echo -e "\e[31mThe following files lack the correct copyright header:\e[0m\n"
             echo $output
             echo -e "\nPlease add the following header:\n"
-            echo "// Copyright $(date +%Y) the $name Authors"
-            echo "// SPDX-License-Identifier: $spdx_expression"
+            echo -e "\e[32m// Copyright $(date +%Y) the $name Authors"
+            echo -e "// SPDX-License-Identifier: $spdx_expression\e[0m"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
@@ -100,7 +100,7 @@ runs:
         fi
 
         if [ "$all_ok" -eq 1 ]; then
-          echo "All files have correct copyright headers."
+          echo "All files have correct copyright headers. Because $all_ok yeah."
         else
           exit 1
         fi
