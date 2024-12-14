@@ -61,7 +61,7 @@ runs:
           echo "In the following locations: $3"
 
           set +e
-          output=$(rg "$header_regex" --files-without-match --multiline $3 .)
+          output=$(rg "$header_regex" --files-without-match --multiline -g 'copyright/**/*.yml' .)
           rg "$header_regex" --files-without-match --multiline $3 .
           set -e
 
