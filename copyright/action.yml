@@ -91,7 +91,7 @@ runs:
             echo $output
             echo -e "\nPlease add the following header:\n"
             echo -e "$green// Copyright $(date +%Y) the $name Authors$cend"
-            echo -e "$green// SPDX-License-Identifier: $spdx_expression$cend"
+            echo -e "// SPDX-License-Identifier:$green $spdx_expression$cend"
             echo -e "\n... rest of the file ...\n"
             all_ok=0
           fi
@@ -109,7 +109,7 @@ runs:
         fi
 
         if [ "$all_ok" -eq 1 ]; then
-          echo -e "$greenAll files have correct copyright headers.$cend"
+          echo -e "$green""All files have correct copyright headers.$cend"
         else
           exit 1
         fi
