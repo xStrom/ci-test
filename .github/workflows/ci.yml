@@ -40,7 +40,7 @@ jobs:
       copyright-config: >
         [
           {
-            "name":    "foo",
+            "name":    "CI's \"cool\"",
             "license": "Apache-2.0 OR MIT",
             "globs":   ["*.rs", "!with space/"]
           },
