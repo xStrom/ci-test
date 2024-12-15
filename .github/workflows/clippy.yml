@@ -63,9 +63,11 @@ jobs:
   clippy:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Process inputs
-        shell: bash
         run: |
           # Process inputs
           exclude='${{ inputs.exclude }}'
