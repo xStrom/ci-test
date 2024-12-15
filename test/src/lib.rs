@@ -3,9 +3,6 @@
 
 //! This is a simple test project so the CI has something to verify.
 
-/// Triggering typos.
-pub const CULUR: usize = 5;
-
 /// Super cool function.
 pub fn cool() -> bool {
     #[cfg(debug_assertions)]

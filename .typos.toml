@@ -8,7 +8,6 @@
 
 # Match Identifier - Case Sensitive
 [default.extend-identifiers]
-CULUR = "COLOR"
 
 # Match Inside a Word - Case Insensitive
 [default.extend-words]
