@@ -11,6 +11,10 @@ on:
         type: string
         required: false
         default: ""
+      dependencies:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -98,6 +102,17 @@ jobs:
           toolchain: ${{ steps.versions.outputs.rust-stable }}
           targets: ${{ inputs.target }}
           components: clippy
+
+      - name: Install cargo-hack
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-hack
+
+      - name: Install dependencies
+        if: inputs.dependencies != ''
+        run: |
+          # Install dependencies
+          ${{ inputs.dependencies }}
 
       - name: Run cargo clippy
         run: cargo clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} -- -D warnings
