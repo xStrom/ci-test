@@ -115,6 +115,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/lfs.yml@main
     with:
       key: ${{ needs.config.outputs.lfs-key }}
+      key-glob: test/*.toml
 
   test:
     name: ${{ fromJson('''Test''') }}

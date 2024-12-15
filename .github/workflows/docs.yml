@@ -74,6 +74,6 @@ jobs:
 
       # We test documentation using nightly to match docs.rs.
       - name: Run cargo doc
-        run: cargo doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-deps --document-private-items -Zunstable-options -Zrustdoc-scrape-examples
         env:
           RUSTDOCFLAGS: --cfg docsrs -D warnings
+        run: cargo doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-deps --document-private-items -Zunstable-options -Zrustdoc-scrape-examples

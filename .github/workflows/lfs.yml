@@ -6,7 +6,12 @@ on:
       # Basic inputs
       key:
         type: string
-        required: true
+        required: false
+        default: ""
+      key-glob:
+        type: string
+        required: false
+        default: ""
 
 jobs:
   prime-lfs-cache:
@@ -20,6 +25,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Generate key
+        id: key
+        env:
+          GLOB_HASH: ${{ hashFiles(inputs.key-glob) }}
+        run: |
+          # Generate key
+          printf "value=%s%s" "${{ inputs.key }}" "$GLOB_HASH" | tee -a $GITHUB_OUTPUT
+
       - name: Fail on purpose
         run: exit 1
 
@@ -28,7 +41,7 @@ jobs:
       #   uses: actions/cache@v4
       #   with:
       #     path: .git/lfs
-      #     key: lfs-${{ inputs.key }}
+      #     key: lfs-${{ steps.key.outputs.value }}
       #     restore-keys: lfs-
       #     enableCrossOsArchive: true
 
