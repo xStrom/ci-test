@@ -32,7 +32,7 @@ jobs:
         run: cargo fmt --all --check
 
   formatting:
-    name: Formatting
+    name: ${{ fromJson('''Check''') }}
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
       taplo: true
@@ -52,7 +52,7 @@ jobs:
         ]
 
   typos:
-    name: Typos
+    name: ${{ fromJson('''Check''') }}
     uses: xStrom/ci-test/.github/workflows/typos.yml@main
 
   clippy:
