@@ -35,22 +35,21 @@ jobs:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
     with:
-      taplo: false
-      #copyright-name: CI's "cool" .^$*+?()[{\| $?
-      # copyright-config: >
-      #   [
-      #     {
-      #       "name":    "CI's \\n \"cool\" .^$*+?()[{\\| $?",
-      #       "license": "Apache-2.0 OR MIT",
-      #       "globs":   ["*.rs", "!with space/"]
-      #     },
-      #     {
-      #       "name":    "Cool",
-      #       "license": "BSD",
-      #       "globs":   ["with space/**/*.rs"]
-      #     }
-      #   ]
-      # rdme-projects: test
+      taplo: true
+      rdme-projects: test
+      copyright-config: >
+        [
+          {
+            "name":    "CI's \\n \"cool\" .^$*+?()[{\\| $?",
+            "license": "Apache-2.0 OR MIT",
+            "globs":   ["*.rs", "!with space/"]
+          },
+          {
+            "name":    "Cool",
+            "license": "BSD",
+            "globs":   ["with space/**/*.rs"]
+          }
+        ]
 
   typos:
     name: Typos
