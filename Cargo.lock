@@ -9,3 +9,7 @@ version = "0.0.0"
 [[package]]
 name = "test_no_wasm"
 version = "0.0.0"
+
+[[package]]
+name = "test_no_wasm_2"
+version = "0.0.0"
