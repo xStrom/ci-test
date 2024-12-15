@@ -5,7 +5,7 @@ on:
 
 jobs:
   formatting:
-    name: 📜
+    name: Typos
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

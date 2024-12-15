@@ -51,7 +51,7 @@ on:
 
 jobs:
   formatting:
-    name: 🔍
+    name: Formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
