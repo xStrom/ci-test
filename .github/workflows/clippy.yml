@@ -118,13 +118,11 @@ jobs:
       - name: Restore cache
         uses: Swatinem/rust-cache@v2
         with:
+          key: ${{ inputs.target }}
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: Run cargo clippy
         run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature -- -D warnings
-
-      - name: Run cargo clippy (auxiliary)
-        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature --tests --benches --examples -- -D warnings
 
       - name: Run cargo clippy (no debug_assertions)
         if: steps.presence.outputs.debug-assertions == 'true'
@@ -132,10 +130,11 @@ jobs:
         env:
           CARGO_PROFILE_CI_DEBUG_ASSERTIONS: "false"
 
+      - name: Run cargo clippy (auxiliary)
+        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature --tests --benches --examples -- -D warnings
+
       - name: Run cargo clippy (auxiliary) (no debug_assertions)
         if: steps.presence.outputs.debug-assertions == 'true'
         run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature --tests --benches --examples -- -D warnings
         env:
           CARGO_PROFILE_CI_DEBUG_ASSERTIONS: "false"
-
-# TODO: Check if the ordering on these can be changed without performance problems .. test it on Xilem or such locally ..
