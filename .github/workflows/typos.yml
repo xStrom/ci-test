@@ -13,3 +13,9 @@ jobs:
 
       - name: Check typos
         uses: crate-ci/typos@v1.28.2
+
+      - name: Suggest actions to handle failure
+        if: failure()
+        run: |
+          # Suggest actions to handle failure
+          echo "Consider changing the text that failed the typos check, or if you think it's not a typo then modify .typos.toml."
