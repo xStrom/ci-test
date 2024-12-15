@@ -7,6 +7,10 @@ on:
       target:
         type: string
         required: true
+      exclude:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -60,6 +64,19 @@ jobs:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
     steps:
+      - name: Process inputs
+        run: |
+          exclude='${{ inputs.exclude }}'
+          exclude_args=()
+          for pkg in $exclude; do
+            exclude_args+=('--exclude' "$pkg")
+          done
+          export EXCLUDE_ARGS="${exclude_args[*]}"
+
+      - name: Test inputs
+        run: |
+          echo "$EXCLUDE_ARGS"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
