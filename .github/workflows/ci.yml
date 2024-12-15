@@ -65,11 +65,11 @@ jobs:
     with:
       target: ${{ matrix.target }}
       exclude: test_no_wasm test_my_wasm
-      dependencies: >
-        ${{ (matrix.target == 'x86_64-unknown-linux-gnu' && '
+      dependencies: |
+        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
           sudo apt install ripgrep
           rg --version
-        ') || 'hoboy'}}
+        '}}
 
   # android:
   #   name: ${{ fromJson('''Android''') }}

@@ -109,7 +109,7 @@ jobs:
           tool: cargo-hack
 
       - name: Install dependencies
-        if: inputs.dependencies != '' && inputs.dependencies != 'false'
+        if: inputs.dependencies != '' && !startsWith(inputs.dependencies, 'false')
         run: |
           # Install dependencies
           echo '${{ inputs.dependencies }}'
