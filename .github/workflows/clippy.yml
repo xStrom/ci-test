@@ -66,16 +66,14 @@ jobs:
     steps:
       - name: Process inputs
         run: |
+          # Process inputs
           exclude='${{ inputs.exclude }}'
           exclude_args=()
           for pkg in $exclude; do
             exclude_args+=('--exclude' "$pkg")
           done
+          echo "EXCLUDE_ARGS=${exclude_args[*]}"
           echo "EXCLUDE_ARGS=${exclude_args[*]}" >> $GITHUB_ENV
-
-      - name: Test inputs
-        run: |
-          echo "$EXCLUDE_ARGS"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -100,4 +98,4 @@ jobs:
           components: clippy
 
       - name: Run cargo clippy
-        run: cargo clippy --workspace --locked --profile ci --target ${{ inputs.target }} -- -D warnings
+        run: cargo clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} -- -D warnings
