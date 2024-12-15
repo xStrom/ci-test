@@ -7,6 +7,10 @@ on:
       target:
         type: string
         required: true
+      lfs-key:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string

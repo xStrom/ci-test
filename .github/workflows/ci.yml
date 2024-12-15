@@ -43,21 +43,11 @@ jobs:
         {
           "wasm32-unknown-unknown": "${{ env.EXCLUDE_PKGS_WASM }}"
         }
-      lfs-key: ${{ steps.lfs.outputs.key }}
     steps:
       - name: Provide configuration
         run: |
           # Provide configuration
           echo "Providing configuration .."
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Generate LFS cache key
-        id: lfs
-        run: |
-          # Generate LFS cache key
-          echo 'key=${{ hashFiles('test/*.toml') }}' | tee -a $GITHUB_OUTPUT
 
   formatting:
     name: ${{ fromJson('''Check''') }}
@@ -114,7 +104,6 @@ jobs:
     needs: config
     uses: xStrom/ci-test/.github/workflows/lfs.yml@main
     with:
-      key: ${{ needs.config.outputs.lfs-key }}
       key-glob: test/*.toml
 
   test:
@@ -126,6 +115,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/test.yml@main
     with:
       target: ${{ matrix.target }}
+      lfs-key: ${{ needs.prime-lfs-cache.outputs.key }}
 
   # msrv:
   #   name: ${{ fromJson('''MSRV''') }}

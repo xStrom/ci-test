@@ -12,12 +12,17 @@ on:
         type: string
         required: false
         default: ""
+    outputs:
+      key:
+        value: ${{ jobs.prime-lfs-cache.outputs.key }}
 
 jobs:
   prime-lfs-cache:
     name: LFS cache
     runs-on: ubuntu-latest
     continue-on-error: true
+    outputs:
+      key: lfs-${{ steps.key.outputs.value }}
     defaults:
       run:
         shell: bash
