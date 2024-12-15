@@ -1,6 +1,6 @@
 # CI Test
 
-Testing various CI strategies here ..
+Testing various CI strategies here ...
 
 ## How to specify additional dependencies
 
