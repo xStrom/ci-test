@@ -64,6 +64,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       target: ${{ matrix.target }}
+      exclude: test_no_wasm
 
   # android:
   #   name: ${{ fromJson('''Android''') }}
