@@ -1,9 +1,9 @@
 // Copyright 2024 the CI's \n "cool" .^$*+?()[{\| $? Authors
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 
-//! This is a sZimple test project so the CI has something to verify.
+//! This is a simple test project so the CI has something to verify.
 
-// Thsa gasg hred rwaqg gsdg.
+/// Triggering typos.
 pub const CULUR: usize = 5;
 
 /// Super cool function.
