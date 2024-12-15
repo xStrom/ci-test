@@ -15,7 +15,7 @@ runs:
         # Check for debug_assertions in Rust code
         grep --version
         set +e
-        grep -qr --include="*.rs" "debug_assertions" .
+        grep -qr --include='*.rs' 'debug_assertions' .
         exit_code=$?
         set -e
         if [ $exit_code -eq 0 ]; then
