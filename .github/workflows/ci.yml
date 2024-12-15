@@ -34,7 +34,8 @@ jobs:
   formatting:
     name: Formatting
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
-    #with:
+    with:
+      taplo: false
       #copyright-name: CI's "cool" .^$*+?()[{\| $?
       # copyright-config: >
       #   [
