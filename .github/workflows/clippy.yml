@@ -71,6 +71,11 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Debug
+        run: |
+          echo $GITHUB_EVENT_NAME
+          echo ${{ github.event_name }}
+
       - name: Process inputs
         run: |
           # Process inputs
@@ -84,13 +89,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Testing presence
+      - name: Check presence
         id: presence
         uses: xStrom/ci-test/presence@main
-
-      - name: Presence results
-        run: |
-          echo "Presence returned for debug_assertions: ${{ steps.presence.outputs.debug-assertions }}"
 
       - name: Determine Rust versions
         id: versions
@@ -114,10 +115,25 @@ jobs:
           # Install dependencies
           ${{ inputs.dependencies }}
 
-      - name: Cache tests
-        run: |
-          echo $GITHUB_EVENT_NAME
-          echo ${{ github.event_name }}
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: Run cargo clippy
-        run: cargo clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} -- -D warnings
+        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature -- -D warnings
+
+      - name: Run cargo clippy (auxiliary)
+        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature --tests --benches --examples -- -D warnings
+
+      - name: Run cargo clippy (no debug_assertions)
+        if: steps.presence.outputs.debug-assertions == 'true'
+        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature -- -D warnings
+        env:
+          CARGO_PROFILE_CI_DEBUG_ASSERTIONS: "false"
+
+      - name: Run cargo clippy (auxiliary) (no debug_assertions)
+        if: steps.presence.outputs.debug-assertions == 'true'
+        run: cargo hack clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature --tests --benches --examples -- -D warnings
+        env:
+          CARGO_PROFILE_CI_DEBUG_ASSERTIONS: "false"
