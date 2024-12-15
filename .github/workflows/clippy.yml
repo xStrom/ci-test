@@ -65,6 +65,7 @@ jobs:
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
     steps:
       - name: Process inputs
+        shell: bash
         run: |
           # Process inputs
           exclude='${{ inputs.exclude }}'
