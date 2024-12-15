@@ -43,12 +43,17 @@ jobs:
         {
           "wasm32-unknown-unknown": "${{ env.EXCLUDE_PKGS_WASM }}"
         }
+      lfs-key: ${{ steps.lfs.outputs.key }}
     steps:
       - name: Provide configuration
         run: |
           # Provide configuration
           echo "Providing configuration .."
 
+      - name: Generate LFS cache key
+        id: lfs
+        run: |
+          echo 'key=${{ hashFiles('test/*.toml') }}' | tee -a $GITHUB_OUTPUT
 
   formatting:
     name: ${{ fromJson('''Check''') }}
@@ -100,14 +105,22 @@ jobs:
   #     target: ${{ matrix.target }}
   #     packages: -p test
 
-  # test:
-  #   name: ${{ fromJson('''Test''') }}
-  #   strategy:
-  #     matrix:
-  #       target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
-  #   uses: xStrom/ci-test/.github/workflows/test.yml@main
-  #   with:
-  #     target: ${{ matrix.target }}
+  prime-lfs-cache:
+    name: Prime LFS cache
+    needs: config
+    uses: xStrom/ci-test/.github/workflows/lfs.yml@main
+    with:
+      key: ${{ needs.config.outputs.lfs-key }}
+
+  test:
+    name: ${{ fromJson('''Test''') }}
+    needs: prime-lfs-cache
+    strategy:
+      matrix:
+        target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
+    uses: xStrom/ci-test/.github/workflows/test.yml@main
+    with:
+      target: ${{ matrix.target }}
 
   # msrv:
   #   name: ${{ fromJson('''MSRV''') }}

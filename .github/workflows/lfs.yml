@@ -1,0 +1,37 @@
+name: Prime LFS cache
+
+on:
+  workflow_call:
+    inputs:
+      # Basic inputs
+      key:
+        type: string
+        required: true
+
+jobs:
+  prime-lfs-cache:
+    name: Prime LFS cache
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fail on purpose
+        run: exit 1
+
+      # - name: Cache git LFS
+      #   id: lfs-cache
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: .git/lfs
+      #     key: lfs-${{ inputs.key }}
+      #     restore-keys: lfs-
+      #     enableCrossOsArchive: true
+
+      # - name: Fetch LFS data
+      #   if: ${{ steps.lfs-cache.outputs.cache-hit != 'true' }}
+      #   run: git lfs fetch
