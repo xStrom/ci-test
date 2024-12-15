@@ -18,4 +18,7 @@ jobs:
         if: failure()
         run: |
           # Suggest actions to handle failure
-          echo "Consider changing the text that failed the typos check, or if you think it's not a typo then modify .typos.toml."
+          yellow="\e[33m"
+          cend="\e[0m"
+          printf "${yellow}Consider changing the text that failed the typos check, or if you think it's not a typo then modify .typos.toml.${cend}\n"
+          exit 1

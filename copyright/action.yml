@@ -58,8 +58,8 @@ runs:
       run: |
         # Check copyright headers
         all_ok=1
-        green="\e[32m"
         red="\e[31m"
+        green="\e[32m"
         cend="\e[0m"
 
         escape_for_regex() {
