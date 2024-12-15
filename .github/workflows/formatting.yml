@@ -53,6 +53,9 @@ jobs:
   formatting:
     name: Formatting
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

@@ -34,6 +34,9 @@ jobs:
   android:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
