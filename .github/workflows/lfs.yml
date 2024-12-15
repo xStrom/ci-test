@@ -10,7 +10,7 @@ on:
 
 jobs:
   prime-lfs-cache:
-    name: Prime LFS cache
+    name: LFS cache
     runs-on: ubuntu-latest
     continue-on-error: true
     defaults:

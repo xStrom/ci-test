@@ -50,9 +50,13 @@ jobs:
           # Provide configuration
           echo "Providing configuration .."
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Generate LFS cache key
         id: lfs
         run: |
+          # Generate LFS cache key
           echo 'key=${{ hashFiles('test/*.toml') }}' | tee -a $GITHUB_OUTPUT
 
   formatting:
@@ -106,7 +110,7 @@ jobs:
   #     packages: -p test
 
   prime-lfs-cache:
-    name: Prime LFS cache
+    name: Prime
     needs: config
     uses: xStrom/ci-test/.github/workflows/lfs.yml@main
     with:
