@@ -114,5 +114,10 @@ jobs:
           # Install dependencies
           ${{ inputs.dependencies }}
 
+      - name: Cache tests
+        run: |
+          echo $GITHUB_EVENT_NAME
+          echo ${{ github.event_name }}
+
       - name: Run cargo clippy
         run: cargo clippy --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} -- -D warnings

@@ -7,17 +7,17 @@ Testing various CI strategies here ..
 ```yml
 dependencies: |
   ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-	sudo apt install ripgrep
-	rg --version
+    sudo apt install ripgrep
+    rg --version
   '}}
 
 dependencies: |
   ${{ (matrix.target == 'x86_64-unknown-linux-gnu' && '
-	sudo apt install ripgrep
-	rg --version
+    sudo apt install ripgrep
+    rg --version
   ') || (matrix.target == 'x86_64-pc-windows-msvc' && '
-	choco install ripgrep
-	rg --version
+    choco install ripgrep
+    rg --version
   ')}}
 ```
 
