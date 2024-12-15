@@ -71,7 +71,7 @@ jobs:
           for pkg in $exclude; do
             exclude_args+=('--exclude' "$pkg")
           done
-          export EXCLUDE_ARGS="${exclude_args[*]}"
+          echo "EXCLUDE_ARGS=${exclude_args[*]}" >> $GITHUB_ENV
 
       - name: Test inputs
         run: |
