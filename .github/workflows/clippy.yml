@@ -112,7 +112,6 @@ jobs:
         if: inputs.dependencies != '' && !startsWith(inputs.dependencies, 'false')
         run: |
           # Install dependencies
-          echo '${{ inputs.dependencies }}'
           ${{ inputs.dependencies }}
 
       - name: Run cargo clippy

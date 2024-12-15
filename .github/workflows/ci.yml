@@ -66,10 +66,13 @@ jobs:
       target: ${{ matrix.target }}
       exclude: test_no_wasm test_my_wasm
       dependencies: |
-        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+        ${{ (matrix.target == 'x86_64-unknown-linux-gnu' && '
           sudo apt install ripgrep
           rg --version
-        '}}
+        ') || (matrix.target == 'x86_64-pc-windows-msvc' && '
+          choco install ripgrep
+          rg --version
+        ')}}
 
   # android:
   #   name: ${{ fromJson('''Android''') }}
