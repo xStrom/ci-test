@@ -101,7 +101,6 @@ jobs:
 
   prime-lfs-cache:
     name: Prime
-    needs: config
     uses: xStrom/ci-test/.github/workflows/lfs.yml@main
     with:
       key-glob: test/*.toml
