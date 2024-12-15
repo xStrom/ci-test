@@ -1,3 +1,7 @@
+env:
+  # List of packages that can not target Wasm.
+  EXCLUDE_PKGS_WASM: test_no_wasm test_no_wasm_2
+
 name: CI
 
 on:
@@ -31,6 +35,21 @@ jobs:
       - name: Run cargo fmt
         run: cargo fmt --all --check
 
+  config:
+    name: Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      exclude: >
+        {
+          "wasm32-unknown-unknown": "${{ env.EXCLUDE_PKGS_WASM }}"
+        }
+    steps:
+      - name: Provide configuration
+        run: |
+          # Provide configuration
+          echo "Providing configuration .."
+
+
   formatting:
     name: ${{ fromJson('''Check''') }}
     uses: xStrom/ci-test/.github/workflows/formatting.yml@main
@@ -57,6 +76,7 @@ jobs:
 
   clippy:
     name: ${{ fromJson('''Clippy''') }}
+    needs: config
     strategy:
       fail-fast: false
       matrix:
@@ -64,7 +84,7 @@ jobs:
     uses: xStrom/ci-test/.github/workflows/clippy.yml@main
     with:
       target: ${{ matrix.target }}
-      exclude: test_no_wasm test_no_wasm_2
+      exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
       dependencies: |
         ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
           sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
