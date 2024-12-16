@@ -71,8 +71,23 @@ jobs:
       run:
         shell: bash
     steps:
+      # We intentionally do not use lfs: true here, instead using the caching method to save LFS bandwidth.
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Restore LFS cache
+        id: lfs-cache
+        if: inputs.lfs-key != ''
+        uses: actions/cache/restore@v4
+        with:
+          path: .git/lfs
+          key: ${{ inputs.lfs-key }}
+          enableCrossOsArchive: true
+
+      - name: Checkout LFS files
+        if: inputs.lfs-key != ''
+        continue-on-error: true
+        run: git lfs checkout
 
       - name: Determine Rust versions
         id: versions
@@ -89,15 +104,21 @@ jobs:
         with:
           tool: cargo-nextest
 
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ inputs.target }}
+          save-if: ${{ github.event_name != 'merge_group' }}
+
       - name: Run cargo nextest
         run: cargo nextest run --workspace --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Run cargo test --doc
-        run: cargo test --doc --workspace --locked --profile ci --all-features --no-fail-fast
+        run: cargo test --doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Upload failing test results
-        uses: actions/upload-artifact@v4
         if: failure() && inputs.failed-artifacts != ''
+        uses: actions/upload-artifact@v4
         with:
-          name: failed-tests-${{ inputs.target }}
+          name: failed-tests-${{ inputs.target }}-${{ github.run_number }}
           path: ${{ inputs.failed-artifacts }}

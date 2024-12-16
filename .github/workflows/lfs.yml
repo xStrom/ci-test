@@ -38,15 +38,15 @@ jobs:
           # Generate key
           printf "value=%s%s" "${{ inputs.key }}" "$GLOB_HASH" | tee -a $GITHUB_OUTPUT
 
-      # - name: Cache git LFS
-      #   id: lfs-cache
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .git/lfs
-      #     key: lfs-${{ steps.key.outputs.value }}
-      #     restore-keys: lfs-
-      #     enableCrossOsArchive: true
+      - name: Cache git LFS
+        id: lfs-cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ steps.key.outputs.value }}
+          restore-keys: lfs-
+          enableCrossOsArchive: true
 
-      # - name: Fetch LFS data
-      #   if: ${{ steps.lfs-cache.outputs.cache-hit != 'true' }}
-      #   run: git lfs fetch
+      - name: Fetch LFS data
+        if: ${{ steps.lfs-cache.outputs.cache-hit != 'true' }}
+        run: git lfs fetch
