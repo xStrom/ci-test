@@ -115,6 +115,7 @@ jobs:
     with:
       target: ${{ matrix.target }}
       lfs-key: ${{ needs.prime-lfs-cache.outputs.key }}
+      failed-artifacts: test/data
 
   # msrv:
   #   name: ${{ fromJson('''MSRV''') }}

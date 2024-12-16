@@ -11,6 +11,10 @@ on:
         type: string
         required: false
         default: ""
+      failed-artifacts:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -90,3 +94,10 @@ jobs:
 
       - name: Run cargo test --doc
         run: cargo test --doc --workspace --locked --profile ci --all-features --no-fail-fast
+
+      - name: Upload failing test results
+        uses: actions/upload-artifact@v4
+        if: failure() && inputs.failed-artifacts != ''
+        with:
+          name: failed-tests-${{ inputs.target }}
+          path: ${{ inputs.failed-artifacts }}
