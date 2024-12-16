@@ -13,8 +13,18 @@ pub fn cool() -> bool {
 
 #[cfg(test)]
 mod tests {
-    // CI will fail unless cargo nextest can execute at least one test per workspace.
-    // Delete this dummy test once we have an actual real test.
+    use std::fs::File;
+    use std::io::prelude::*;
+
     #[test]
-    fn dummy_test_until_we_have_a_real_test() {}
+    fn generate_data() {
+        let mut one = File::open("data/one.txt").unwrap();
+        let mut contents = String::new();
+        one.read_to_string(&mut contents).unwrap();
+        if contents != "The One" {
+            let mut file = File::create("data/two.txt").unwrap();
+            file.write_all(b"The Two").unwrap();
+            assert!(false);
+        }
+    }
 }

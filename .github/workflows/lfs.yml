@@ -38,9 +38,6 @@ jobs:
           # Generate key
           printf "value=%s%s" "${{ inputs.key }}" "$GLOB_HASH" | tee -a $GITHUB_OUTPUT
 
-      - name: Fail on purpose
-        run: exit 1
-
       # - name: Cache git LFS
       #   id: lfs-cache
       #   uses: actions/cache@v4
