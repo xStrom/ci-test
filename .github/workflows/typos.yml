@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  formatting:
+  typos:
     name: Typos
     runs-on: ubuntu-latest
     defaults:

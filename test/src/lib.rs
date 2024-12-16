@@ -24,7 +24,7 @@ mod tests {
         if contents != "The One" {
             let mut file = File::create("data/two.txt").unwrap();
             file.write_all(b"The Two").unwrap();
-            assert!(false);
+            panic!("Unexpected contents!");
         }
     }
 }

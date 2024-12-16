@@ -64,7 +64,7 @@ on:
           }
 
 jobs:
-  clippy:
+  test:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
     runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
     defaults:
