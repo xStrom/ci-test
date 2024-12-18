@@ -70,6 +70,29 @@ on:
 
             "wasm32-unknown-unknown":     "ubuntu-latest"
           }
+      runnable:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     true,
+            "aarch64-pc-windows-msvc":    true,
+
+            "x86_64-apple-darwin":        true,
+            "aarch64-apple-darwin":       true,
+
+            "x86_64-unknown-linux-gnu":   true,
+            "aarch64-unknown-linux-gnu":  true,
+
+            "x86_64-linux-android":       false,
+            "aarch64-linux-android":      false,
+            "armv7-linux-androideabi":    false,
+
+            "x86_64-apple-ios":           false,
+            "aarch64-apple-ios":          false,
+
+            "wasm32-unknown-unknown":     false
+          }
 
 jobs:
   test:
@@ -95,7 +118,7 @@ jobs:
 
       - name: Restore LFS cache
         id: lfs-cache
-        if: inputs.lfs-key != ''
+        if: inputs.lfs-key != '' && fromJson(inputs.runnable)[inputs.target]
         uses: actions/cache/restore@v4
         with:
           path: .git/lfs
@@ -103,7 +126,7 @@ jobs:
           enableCrossOsArchive: true
 
       - name: Checkout LFS files
-        if: inputs.lfs-key != ''
+        if: inputs.lfs-key != '' && fromJson(inputs.runnable)[inputs.target]
         continue-on-error: true
         run: git lfs checkout
 
@@ -118,6 +141,7 @@ jobs:
           targets: ${{ inputs.target }}
 
       - name: Install cargo-nextest
+        if: fromJson(inputs.runnable)[inputs.target]
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-nextest
@@ -135,13 +159,15 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: Run cargo nextest
+        if: fromJson(inputs.runnable)[inputs.target]
         run: cargo nextest run --workspace $EXCLUDE_ARGS --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Run cargo test --doc
+        if: fromJson(inputs.runnable)[inputs.target]
         run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Upload failing test results
-        if: failure() && inputs.failed-artifacts != ''
+        if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
         uses: actions/upload-artifact@v4
         with:
           name: failed-tests-${{ inputs.target }}-${{ github.run_number }}
