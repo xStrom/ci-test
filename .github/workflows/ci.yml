@@ -107,13 +107,18 @@ jobs:
 
   test:
     name: ${{ fromJson('''Test''') }}
-    needs: prime-lfs-cache
+    needs: [config, prime-lfs-cache]
     strategy:
       matrix:
-        target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
+        target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown]
     uses: xStrom/ci-test/.github/workflows/test.yml@main
     with:
       target: ${{ matrix.target }}
+      exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
+      dependencies: |
+        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+        '}}
       lfs-key: ${{ needs.prime-lfs-cache.outputs.key }}
       failed-artifacts: test/data
 

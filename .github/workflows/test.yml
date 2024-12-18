@@ -7,6 +7,14 @@ on:
       target:
         type: string
         required: true
+      exclude:
+        type: string
+        required: false
+        default: ""
+      dependencies:
+        type: string
+        required: false
+        default: ""
       lfs-key:
         type: string
         required: false
@@ -71,6 +79,16 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Process inputs
+        run: |
+          # Process inputs
+          exclude='${{ inputs.exclude }}'
+          exclude_args=()
+          for pkg in $exclude; do
+            exclude_args+=('--exclude' "$pkg")
+          done
+          echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
+
       # We intentionally do not use lfs: true here, instead using the caching method to save LFS bandwidth.
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -104,6 +122,12 @@ jobs:
         with:
           tool: cargo-nextest
 
+      - name: Install dependencies
+        if: inputs.dependencies != '' && !startsWith(inputs.dependencies, 'false')
+        run: |
+          # Install dependencies
+          ${{ inputs.dependencies }}
+
       - name: Restore cache
         uses: Swatinem/rust-cache@v2
         with:
@@ -111,10 +135,10 @@ jobs:
           save-if: ${{ github.event_name != 'merge_group' }}
 
       - name: Run cargo nextest
-        run: cargo nextest run --workspace --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
+        run: cargo nextest run --workspace $EXCLUDE_ARGS --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Run cargo test --doc
-        run: cargo test --doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != ''
