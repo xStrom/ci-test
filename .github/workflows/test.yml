@@ -166,6 +166,10 @@ jobs:
         if: fromJson(inputs.runnable)[inputs.target]
         run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
+      - name: Run cargo test --no-run
+        if: fromJson(inputs.runnable)[inputs.target] == false
+        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run
+
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
         uses: actions/upload-artifact@v4
