@@ -169,11 +169,11 @@ jobs:
 
       - name: Run cargo test --doc cross
         if: fromJson(inputs.runnable)[inputs.target] == false
-        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features -Zdoctest-xcompile
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features -Zdoctest-xcompile --verbose
 
       - name: Run cargo test --no-run
         if: fromJson(inputs.runnable)[inputs.target] == false
-        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run -Zdoctest-xcompile
+        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run -Zdoctest-xcompile --verbose
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
