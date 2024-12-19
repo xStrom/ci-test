@@ -49,46 +49,46 @@ jobs:
           # Provide configuration
           echo "Providing configuration .."
 
-  formatting:
-    name: ${{ fromJson('''Check''') }}
-    uses: xStrom/ci-test/.github/workflows/formatting.yml@main
-    with:
-      taplo: true
-      rdme-projects: test
-      copyright-config: >
-        [
-          {
-            "name":    "CI's \\n \"cool\" .^$*+?()[{\\| $?",
-            "license": "Apache-2.0 OR MIT",
-            "globs":   ["*.rs", "!with space/"]
-          },
-          {
-            "name":    "Cool",
-            "license": "BSD",
-            "globs":   ["with space/**/*.rs"]
-          }
-        ]
+  # formatting:
+  #   name: ${{ fromJson('''Check''') }}
+  #   uses: xStrom/ci-test/.github/workflows/formatting.yml@main
+  #   with:
+  #     taplo: true
+  #     rdme-projects: test
+  #     copyright-config: >
+  #       [
+  #         {
+  #           "name":    "CI's \\n \"cool\" .^$*+?()[{\\| $?",
+  #           "license": "Apache-2.0 OR MIT",
+  #           "globs":   ["*.rs", "!with space/"]
+  #         },
+  #         {
+  #           "name":    "Cool",
+  #           "license": "BSD",
+  #           "globs":   ["with space/**/*.rs"]
+  #         }
+  #       ]
 
-  typos:
-    name: ${{ fromJson('''Check''') }}
-    uses: xStrom/ci-test/.github/workflows/typos.yml@main
+  # typos:
+  #   name: ${{ fromJson('''Check''') }}
+  #   uses: xStrom/ci-test/.github/workflows/typos.yml@main
 
-  clippy:
-    name: ${{ fromJson('''Clippy''') }}
-    needs: config
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown]
-        #target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
-    uses: xStrom/ci-test/.github/workflows/clippy.yml@main
-    with:
-      target: ${{ matrix.target }}
-      exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
-      dependencies: |
-        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-        '}}
+  # clippy:
+  #   name: ${{ fromJson('''Clippy''') }}
+  #   needs: config
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown]
+  #       #target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+  #   uses: xStrom/ci-test/.github/workflows/clippy.yml@main
+  #   with:
+  #     target: ${{ matrix.target }}
+  #     exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
+  #     dependencies: |
+  #       ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+  #         sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+  #       '}}
 
   # android:
   #   name: ${{ fromJson('''Android''') }}
@@ -113,7 +113,8 @@ jobs:
       fail-fast: false
       matrix:
         #target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-unknown-linux-gnu]
-        target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+        #target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+        target: [x86_64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi]
     uses: xStrom/ci-test/.github/workflows/test.yml@main
     with:
       target: ${{ matrix.target }}
