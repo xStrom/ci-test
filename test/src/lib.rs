@@ -6,7 +6,7 @@
 /// Super cool function.
 ///
 /// ```
-/// panic!("Fails on purpose");
+/// //panic!("Fails on purpose");
 /// ```
 pub fn cool() -> bool {
     #[cfg(debug_assertions)]
