@@ -137,7 +137,8 @@ jobs:
       - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ steps.versions.outputs.rust-stable }}
+          #toolchain: ${{ steps.versions.outputs.rust-stable }}
+          toolchain: nightly
           targets: ${{ inputs.target }}
 
       - name: Install cargo-nextest
@@ -168,7 +169,11 @@ jobs:
 
       - name: Run cargo test --no-run
         if: fromJson(inputs.runnable)[inputs.target] == false
-        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run
+        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run -Zdoctest-xcompile
+
+      - name: Run cargo test --doc cross
+        if: fromJson(inputs.runnable)[inputs.target] == false
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features -Zdoctest-xcompile
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]

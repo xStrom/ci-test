@@ -4,6 +4,10 @@
 //! This is a simple test project so the CI has something to verify.
 
 /// Super cool function.
+///
+/// ```
+/// panic!("Fails on purpose");
+/// ```
 pub fn cool() -> bool {
     #[cfg(debug_assertions)]
     return true;
