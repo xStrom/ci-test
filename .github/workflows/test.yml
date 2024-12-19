@@ -165,7 +165,7 @@ jobs:
 
       - name: Run cargo test --doc
         if: fromJson(inputs.runnable)[inputs.target]
-        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast --verbose
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast --verbose -Zdoctest-xcompile
 
       - name: Run cargo test (compile only)
         if: fromJson(inputs.runnable)[inputs.target] == false
