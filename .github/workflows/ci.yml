@@ -41,7 +41,13 @@ jobs:
     outputs:
       exclude: >
         {
-          "wasm32-unknown-unknown": "${{ env.EXCLUDE_PKGS_WASM }}"
+          "wasm32-unknown-unknown": "${{ env.EXCLUDE_PKGS_WASM }}",
+
+          "x86_64-unknown-linux-gnu": "android_trace",
+          "x86_64-linux-android":     "test test_no_wasm test_no_wasm_2",
+          "aarch64-linux-android":    "test test_no_wasm test_no_wasm_2",
+           "armv7-linux-androideabi": "test test_no_wasm test_no_wasm_2"
+
         }
     steps:
       - name: Provide configuration
