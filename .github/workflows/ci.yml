@@ -118,7 +118,7 @@ jobs:
     with:
       target: ${{ matrix.target }}
       exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
-      dependencies: >
+      dependencies: >-
         ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
           sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
         ' || '' }}
