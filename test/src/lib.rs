@@ -6,7 +6,7 @@
 /// Super cool function.
 ///
 /// ```
-/// panic!("Fails on purpose");
+/// //panic!("Fails on purpose");
 /// let x = 5;
 /// ```
 pub fn cool() -> bool {
