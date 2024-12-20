@@ -147,6 +147,9 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] != '' && format('target.{0}.linker = "{1}"', inputs.target, fromJson(inputs.linkers)[inputs.target]) || '' }}
+      CONFIG_RUNNER: ${{ fromJson(inputs.runners)[inputs.target] != '' && format('target.{0}.runner = "{1}"', inputs.target, fromJson(inputs.runners)[inputs.target]) || '' }}
     steps:
       - name: Process inputs
         id: inputs
@@ -211,17 +214,13 @@ jobs:
 
       - name: Run cargo test --no-run
         if: fromJson(inputs.runnable)[inputs.target] == false
-        env:
-          CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] != '' && format('--config ''target.{0}.linker = "{1}"''', inputs.target, fromJson(inputs.linkers)[inputs.target]) || '' }}
-        run: cargo test --tests --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run $CONFIG_LINKER --verbose
+        run: cargo test --tests --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run ${{ env.CONFIG_LINKER != '' && '--config "$CONFIG_LINKER"' }} --verbose
 
       - name: Run cargo test --doc
         env:
-          CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] != '' && format('--config ''target.{0}.linker = "{1}"''', inputs.target, fromJson(inputs.linkers)[inputs.target]) || '' }}
-          CONFIG_RUNNER: ${{ fromJson(inputs.runners)[inputs.target] != '' && format('--config ''target.{0}.runner = "{1}"''', inputs.target, fromJson(inputs.runners)[inputs.target]) || '' }}
           RUSTC_BOOTSTRAP: ${{ inputs.target != steps.config.outputs.rust-host && '1' || '' }}
           DOCTEST_XCOMPILE: ${{ inputs.target != steps.config.outputs.rust-host && '-Zdoctest-xcompile' || '' }}
-        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast $DOCTEST_XCOMPILE $CONFIG_LINKER $CONFIG_RUNNER --verbose
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast $DOCTEST_XCOMPILE ${{ env.CONFIG_LINKER != '' && '--config "$CONFIG_LINKER"' }} ${{ env.CONFIG_RUNNER != '' && '--config "$CONFIG_RUNNER"' }} --verbose
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
