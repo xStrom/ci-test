@@ -118,17 +118,9 @@ jobs:
     with:
       target: ${{ matrix.target }}
       exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
-      # dependencies: >-
-      #   ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-      #     sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-      #   ' || '' }}
       dependencies: >-
         ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-          sudo apt install ripgrep
-          rg --version
-        ' || matrix.target == 'x86_64-pc-windows-msvc' && '
-          choco install ripgrep
-          rg --version
+          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
         ' || '' }}
       lfs-key: ${{ needs.prime-lfs-cache.outputs.key }}
       failed-artifacts: test/data
