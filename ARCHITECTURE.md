@@ -1,7 +1,7 @@
-## Cross compiling tests
+## Cross compiling doc tests
 
 In order to cross compile doc tests, i.e. code blocks inside documentation, we need to use the [`-Zdoctest-xcompile`] feature.
-This feature is not yet stabilized and is officially only available via the nightly toolchain.
+This feature is [not yet stabilized][doctest-xcompile-issue] and is officially only available via the nightly toolchain.
 
 We don't really want to use the latest nightly to compile our tests.
 It can contain behavior differences compared to what our code expects.
@@ -40,3 +40,4 @@ Malformed input is not a security concern, but a functionality concern.
 This of course assumes that we don't source inputs from outside the repository, which would not have passed review.
 
 [`-Zdoctest-xcompile`]: https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#doctest-xcompile
+[doctest-xcompile-issue]: https://github.com/rust-lang/rust/issues/64245
