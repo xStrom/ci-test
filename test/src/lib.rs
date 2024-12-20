@@ -31,6 +31,6 @@ mod tests {
             file.write_all(b"The Two").unwrap();
             panic!("Unexpected contents!");
         }
-        s;
+        panic!("Intentional failure");
     }
 }
