@@ -7,7 +7,7 @@
 ///
 /// ```
 /// //panic!("Fails on purpose");
-/// let x = 5;
+/// let x z= 5;
 /// ```
 pub fn cool() -> bool {
     #[cfg(debug_assertions)]
@@ -31,6 +31,5 @@ mod tests {
             file.write_all(b"The Two").unwrap();
             panic!("Unexpected contents!");
         }
-        panic!("Intentional failure");
     }
 }
