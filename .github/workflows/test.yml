@@ -93,6 +93,52 @@ on:
 
             "wasm32-unknown-unknown":     false
           }
+      linkers:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     "",
+            "aarch64-pc-windows-msvc":    "",
+
+            "x86_64-apple-darwin":        "",
+            "aarch64-apple-darwin":       "",
+
+            "x86_64-unknown-linux-gnu":   "",
+            "aarch64-unknown-linux-gnu":  "true",
+
+            "x86_64-linux-android":       "true",
+            "aarch64-linux-android":      "true",
+            "armv7-linux-androideabi":    "true",
+
+            "x86_64-apple-ios":           "true",
+            "aarch64-apple-ios":          "true",
+
+            "wasm32-unknown-unknown":     ""
+          }
+      runners:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     "",
+            "aarch64-pc-windows-msvc":    "true",
+
+            "x86_64-apple-darwin":        "",
+            "aarch64-apple-darwin":       "",
+
+            "x86_64-unknown-linux-gnu":   "",
+            "aarch64-unknown-linux-gnu":  "true",
+
+            "x86_64-linux-android":       "true",
+            "aarch64-linux-android":      "true",
+            "armv7-linux-androideabi":    "true",
+
+            "x86_64-apple-ios":           "true",
+            "aarch64-apple-ios":          "true",
+
+            "wasm32-unknown-unknown":     "true"
+          }
 
 jobs:
   test:
@@ -163,14 +209,19 @@ jobs:
         if: fromJson(inputs.runnable)[inputs.target]
         run: cargo nextest run --tests --workspace $EXCLUDE_ARGS --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
-      - name: Run cargo test (compile only)
+      - name: Run cargo test --no-run
         if: fromJson(inputs.runnable)[inputs.target] == false
-        run: cargo test --tests --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run --config 'target.${{ inputs.target }}.linker = "true"' --verbose
+        env:
+          CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] == '' && '' || format('--config ''target.{0}.linker = "{1}"''', inputs.target, fromJson(inputs.linkers)[inputs.target]) }}
+        run: cargo test --tests --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run $CONFIG_LINKER --verbose
 
       - name: Run cargo test --doc
-        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast --verbose -Zdoctest-xcompile --config 'target.${{ inputs.target }}.runner = "echo Not running"' --config 'target.${{ inputs.target }}.linker = "true"'
         env:
-          RUSTC_BOOTSTRAP: "1"
+          CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] == '' && '' || format('--config ''target.{0}.linker = "{1}"''', inputs.target, fromJson(inputs.linkers)[inputs.target]) }}
+          CONFIG_RUNNER: ${{ fromJson(inputs.runners)[inputs.target] == '' && '' || format('--config ''target.{0}.runner = "{1}"''', inputs.target, fromJson(inputs.runners)[inputs.target]) }}
+          RUSTC_BOOTSTRAP: ${{ inputs.target == steps.config.outputs.rust-host && '' || '1' }}
+          DOCTEST_XCOMPILE: ${{ inputs.target == steps.config.outputs.rust-host && '' || '-Zdoctest-xcompile' }}
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast $DOCTEST_XCOMPILE $CONFIG_LINKER $CONFIG_RUNNER --verbose
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
