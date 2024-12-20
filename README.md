@@ -5,20 +5,20 @@ Testing various CI strategies here ...
 ## How to specify additional dependencies
 
 ```yml
-dependencies: |
+dependencies: >-
   ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
     sudo apt install ripgrep
     rg --version
-  '}}
+  ' || '' }}
 
-dependencies: |
-  ${{ (matrix.target == 'x86_64-unknown-linux-gnu' && '
+dependencies: >-
+  ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
     sudo apt install ripgrep
     rg --version
-  ') || (matrix.target == 'x86_64-pc-windows-msvc' && '
+  ' || matrix.target == 'x86_64-pc-windows-msvc' && '
     choco install ripgrep
     rg --version
-  ')}}
+  ' || '' }}
 ```
 
 ## License
