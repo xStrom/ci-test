@@ -197,7 +197,7 @@ jobs:
           tool: cargo-nextest
 
       - name: Install dependencies
-        if: inputs.dependencies != '' && !startsWith(inputs.dependencies, 'false')
+        if: inputs.dependencies != ''
         run: |
           # Install dependencies
           ${{ inputs.dependencies }}
