@@ -1,5 +1,5 @@
-name: Versions
-description: Returns various Rust versions.
+name: Configuration
+description: Returns various configuration values.
 
 inputs:
   rust-msrv:
@@ -16,6 +16,8 @@ outputs:
     value: "1.83" # In quotes because otherwise (e.g.) 1.80 would be interpreted as 1.8.
   rust-msrv:
     value: ${{ steps.rust-msrv.outputs.version }}
+  rust-host:
+    value: ${{ steps.rust-host.outputs.triple }}
 
 runs:
   using: composite
@@ -31,5 +33,12 @@ runs:
           echo "No rust-version found in the workspace Cargo.toml file."
           exit 1
         fi
-        echo "version=$msrv" >> $GITHUB_OUTPUT
-        echo "MSRV is $msrv"
+        echo "version=$msrv" | tee -a $GITHUB_OUTPUT
+
+    - name: Determine host triple
+      id: rust-host
+      shell: bash
+      run: |
+        # Determine host triple
+        triple=$(rustc --version --verbose | awk '/host:/{print $2}')
+        echo "triple=$triple" | tee -a $GITHUB_OUTPUT

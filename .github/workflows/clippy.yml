@@ -93,14 +93,14 @@ jobs:
         id: presence
         uses: xStrom/ci-test/presence@main
 
-      - name: Determine Rust versions
-        id: versions
-        uses: xStrom/ci-test/versions@main
+      - name: Get configuration
+        id: config
+        uses: xStrom/ci-test/config@main
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+      - name: Install Rust ${{ steps.config.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ steps.versions.outputs.rust-stable }}
+          toolchain: ${{ steps.config.outputs.rust-stable }}
           targets: ${{ inputs.target }}
           components: clippy
 

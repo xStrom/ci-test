@@ -103,6 +103,7 @@ jobs:
         shell: bash
     steps:
       - name: Process inputs
+        id: inputs
         run: |
           # Process inputs
           exclude='${{ inputs.exclude }}'
@@ -130,15 +131,14 @@ jobs:
         continue-on-error: true
         run: git lfs checkout
 
-      - name: Determine Rust versions
-        id: versions
-        uses: xStrom/ci-test/versions@main
+      - name: Get configuration
+        id: config
+        uses: xStrom/ci-test/config@main
 
-      - name: Install Rust ${{ steps.versions.outputs.rust-stable }}
+      - name: Install Rust ${{ steps.config.outputs.rust-stable }}
         uses: dtolnay/rust-toolchain@master
         with:
-          #toolchain: ${{ steps.versions.outputs.rust-stable }}
-          toolchain: nightly-2024-10-15
+          toolchain: ${{ steps.config.outputs.rust-stable }}
           targets: ${{ inputs.target }}
 
       - name: Install cargo-nextest
@@ -161,15 +161,16 @@ jobs:
 
       - name: Run cargo nextest
         if: fromJson(inputs.runnable)[inputs.target]
-        run: cargo nextest run --workspace $EXCLUDE_ARGS --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
-
-      - name: Run cargo test --doc
-        if: fromJson(inputs.runnable)[inputs.target]
-        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast --verbose -Zdoctest-xcompile
+        run: cargo nextest run --tests --workspace $EXCLUDE_ARGS --locked --cargo-profile ci --target ${{ inputs.target }} --all-features --no-fail-fast
 
       - name: Run cargo test (compile only)
         if: fromJson(inputs.runnable)[inputs.target] == false
-        run: cargo test --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features -Zdoctest-xcompile --config 'target.${{ inputs.target }}.runner = "echo Not running"' --config 'target.${{ inputs.target }}.linker = "true"' --verbose
+        run: cargo test --tests --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-run --config 'target.${{ inputs.target }}.linker = "true"' --verbose
+
+      - name: Run cargo test --doc
+        run: cargo test --doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-fail-fast --verbose -Zdoctest-xcompile --config 'target.${{ inputs.target }}.runner = "echo Not running"' --config 'target.${{ inputs.target }}.linker = "true"'
+        env:
+          RUSTC_BOOTSTRAP: "1"
 
       - name: Upload failing test results
         if: failure() && inputs.failed-artifacts != '' && fromJson(inputs.runnable)[inputs.target]
