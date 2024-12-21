@@ -184,6 +184,7 @@ jobs:
       DISABLE_GPU: ${{ !inputs.enable-gpu || !fromJson(inputs.gpu)[inputs.target] }}
     steps:
       - name: Process inputs
+        if: inputs.env != '' || inputs.exclude != ''
         uses: xStrom/ci-test/inputs@main
         with:
           env: ${{ inputs.env }}

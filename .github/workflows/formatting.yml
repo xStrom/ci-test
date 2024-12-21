@@ -62,6 +62,7 @@ jobs:
         shell: bash
     steps:
       - name: Process inputs
+        if: inputs.env != ''
         uses: xStrom/ci-test/inputs@main
         with:
           env: ${{ inputs.env }}
@@ -112,6 +113,7 @@ jobs:
         env:
           RDME_PROJECTS: ${{ inputs.rdme-projects }}
         run: |
+          # Run cargo rdme
           for project in $RDME_PROJECTS; do
             echo "Running cargo rdme on $project ..."
             cargo rdme --check --heading-base-level=0 --workspace-project=$project

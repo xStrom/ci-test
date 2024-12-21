@@ -81,6 +81,7 @@ jobs:
           echo ${{ github.event_name }}
 
       - name: Process inputs
+        if: inputs.env != '' || inputs.exclude != ''
         uses: xStrom/ci-test/inputs@main
         with:
           env: ${{ inputs.env }}

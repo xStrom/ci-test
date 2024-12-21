@@ -18,6 +18,7 @@ jobs:
         shell: bash
     steps:
       - name: Process inputs
+        if: inputs.env != ''
         uses: xStrom/ci-test/inputs@main
         with:
           env: ${{ inputs.env }}
