@@ -202,6 +202,9 @@ jobs:
             fi
           done <<< "$ENV_VARS"
 
+      - name: Checking env vars
+        run: |
+          # Checking env vars
           echo "Checking: $INTERESTING"
           echo "Checking: $ANOTHER_ONE"
           echo "Checking: $YET_ANOTHER"
