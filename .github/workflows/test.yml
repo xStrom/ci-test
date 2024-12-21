@@ -184,23 +184,10 @@ jobs:
       DISABLE_GPU: ${{ !inputs.enable-gpu || !fromJson(inputs.gpu)[inputs.target] }}
     steps:
       - name: Process inputs
-        id: inputs
-        env:
-          ENV_VARS: ${{ inputs.env }}
-        run: |
-          # Process inputs
-          exclude='${{ inputs.exclude }}'
-          exclude_args=()
-          for pkg in $exclude; do
-            exclude_args+=('--exclude' "$pkg")
-          done
-          echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
-
-          while IFS= read -r line; do
-            if [[ $line =~ [^[:space:]] && ! $line =~ ^[[:space:]]*# ]]; then
-              echo "$line" | tee -a $GITHUB_ENV
-            fi
-          done <<< "$ENV_VARS"
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+          exclude: ${{ inputs.exclude }}
 
       - name: Checking env vars
         run: |

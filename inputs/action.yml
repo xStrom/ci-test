@@ -1,0 +1,41 @@
+name: Process inputs
+description: Processes inputs and saves the results.
+
+inputs:
+  env:
+    description: List of environment variables and their values.
+    required: false
+    default: ""
+  exclude:
+    description: List of packages to exclude.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Process environment variables
+      if: inputs.env != ''
+      shell: bash
+      env:
+        INPUT_ENV: ${{ inputs.env }}
+      run: |
+        # Process environment variables
+        while IFS= read -r line; do
+          if [[ $line =~ [^[:space:]] && ! $line =~ ^[[:space:]]*# ]]; then
+            echo "$line" | tee -a $GITHUB_ENV
+          fi
+        done <<< "$INPUT_ENV"
+
+    - name: Process excluded packages
+      if: inputs.exclude != ''
+      shell: bash
+      env:
+        INPUT_EXCLUDE: ${{ inputs.exclude }}
+      run: |
+        # Process excluded packages
+        exclude_args=()
+        for pkg in $INPUT_EXCLUDE; do
+          exclude_args+=('--exclude' "$pkg")
+        done
+        echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
