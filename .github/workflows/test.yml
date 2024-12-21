@@ -23,6 +23,10 @@ on:
         type: string
         required: false
         default: ""
+      enable-gpu:
+        type: boolean
+        required: false
+        default: false
       # Advanced inputs
       names:
         type: string
@@ -173,7 +177,7 @@ jobs:
     env:
       CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] != '' && format('target.{0}.linker = "{1}"', inputs.target, fromJson(inputs.linkers)[inputs.target]) || '' }}
       CONFIG_RUNNER: ${{ fromJson(inputs.runners)[inputs.target] != '' && format('target.{0}.runner = "{1}"', inputs.target, fromJson(inputs.runners)[inputs.target]) || '' }}
-      DISABLE_GPU: ${{ !fromJson(inputs.gpu)[inputs.target] }}
+      DISABLE_GPU: ${{ !inputs.enable-gpu || !fromJson(inputs.gpu)[inputs.target] }}
     steps:
       - name: Process inputs
         id: inputs
@@ -221,7 +225,7 @@ jobs:
           tool: cargo-nextest
 
       - name: Install GPU dependencies
-        if: runner.os == 'Linux' && fromJson(inputs.gpu)[inputs.target] && fromJson(inputs.runnable)[inputs.target]
+        if: runner.os == 'Linux' && env.DISABLE_GPU == 'false' && fromJson(inputs.runnable)[inputs.target]
         # https://launchpad.net/~kisak/+archive/ubuntu/turtle
         run: |
           # Install GPU dependencies
@@ -229,10 +233,10 @@ jobs:
           sudo apt update
           sudo apt install xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
-      - name: Install dependencies
+      - name: Install additional dependencies
         if: inputs.dependencies != ''
         run: |
-          # Install dependencies
+          # Install additional dependencies
           ${{ inputs.dependencies }}
 
       - name: Restore cache

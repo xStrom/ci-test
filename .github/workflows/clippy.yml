@@ -109,10 +109,10 @@ jobs:
         with:
           tool: cargo-hack
 
-      - name: Install dependencies
+      - name: Install additional dependencies
         if: inputs.dependencies != ''
         run: |
-          # Install dependencies
+          # Install additional dependencies
           ${{ inputs.dependencies }}
 
       - name: Restore cache
