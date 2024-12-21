@@ -11,6 +11,10 @@ on:
         type: string
         required: false
         default: ""
+      dependencies:
+        type: string
+        required: false
+        default: ""
       env:
         type: string
         required: false
@@ -92,6 +96,12 @@ jobs:
         with:
           toolchain: ${{ steps.config.outputs.rust-msrv }}
           targets: ${{ inputs.target }}
+
+      - name: Install additional dependencies
+        if: inputs.dependencies != ''
+        run: |
+          # Install additional dependencies
+          ${{ inputs.dependencies }}
 
       - name: Run cargo check
         run: cargo check --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }}
