@@ -2,6 +2,12 @@ name: Typos
 
 on:
   workflow_call:
+    inputs:
+      # Basic inputs
+      env:
+        type: string
+        required: false
+        default: ""
 
 jobs:
   typos:
@@ -11,6 +17,11 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Process inputs
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 

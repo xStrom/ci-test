@@ -15,6 +15,10 @@ on:
         type: string
         required: false
         default: ""
+      env:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -77,14 +81,10 @@ jobs:
           echo ${{ github.event_name }}
 
       - name: Process inputs
-        run: |
-          # Process inputs
-          exclude='${{ inputs.exclude }}'
-          exclude_args=()
-          for pkg in $exclude; do
-            exclude_args+=('--exclude' "$pkg")
-          done
-          echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+          exclude: ${{ inputs.exclude }}
 
       - name: Checkout repository
         uses: actions/checkout@v4

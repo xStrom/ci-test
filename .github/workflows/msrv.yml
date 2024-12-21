@@ -7,6 +7,14 @@ on:
       target:
         type: string
         required: true
+      exclude:
+        type: string
+        required: false
+        default: ""
+      env:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -63,6 +71,12 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Process inputs
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+          exclude: ${{ inputs.exclude }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -79,4 +93,4 @@ jobs:
           targets: ${{ inputs.target }}
 
       - name: Run cargo check
-        run: cargo check --workspace --locked --profile ci --target ${{ inputs.target }}
+        run: cargo check --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }}

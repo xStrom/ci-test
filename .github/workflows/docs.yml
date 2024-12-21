@@ -7,6 +7,14 @@ on:
       target:
         type: string
         required: true
+      exclude:
+        type: string
+        required: false
+        default: ""
+      env:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -63,6 +71,12 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Process inputs
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+          exclude: ${{ inputs.exclude }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -76,4 +90,4 @@ jobs:
       - name: Run cargo doc
         env:
           RUSTDOCFLAGS: --cfg docsrs -D warnings
-        run: cargo doc --workspace --locked --profile ci --target ${{ inputs.target }} --all-features --no-deps --document-private-items -Zunstable-options -Zrustdoc-scrape-examples
+        run: cargo doc --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --all-features --no-deps --document-private-items -Zunstable-options -Zrustdoc-scrape-examples

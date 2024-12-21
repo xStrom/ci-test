@@ -189,13 +189,6 @@ jobs:
           env: ${{ inputs.env }}
           exclude: ${{ inputs.exclude }}
 
-      - name: Checking env vars
-        run: |
-          # Checking env vars
-          echo "Checking: $INTERESTING"
-          echo "Checking: $ANOTHER_ONE"
-          echo "Checking: $YET_ANOTHER"
-
       # We intentionally do not use lfs: true here, instead using the caching method to save LFS bandwidth.
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -272,5 +265,3 @@ jobs:
         with:
           name: failed-tests-${{ inputs.target }}-${{ github.run_number }}
           path: ${{ inputs.failed-artifacts }}
-
-# TODO: Add generic support for env variables (for Vello Skip LFS tests, but also open-ended), through an input list of lines processed by process inputs step

@@ -12,6 +12,10 @@ on:
         type: string
         required: false
         default: ""
+      env:
+        type: string
+        required: false
+        default: ""
     outputs:
       key:
         value: ${{ jobs.prime-lfs-cache.outputs.key }}
@@ -27,6 +31,11 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Process inputs
+        uses: xStrom/ci-test/inputs@main
+        with:
+          env: ${{ inputs.env }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
