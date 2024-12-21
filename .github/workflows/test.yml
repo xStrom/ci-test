@@ -27,6 +27,10 @@ on:
         type: boolean
         required: false
         default: false
+      env:
+        type: string
+        required: false
+        default: ""
       # Advanced inputs
       names:
         type: string
@@ -181,6 +185,8 @@ jobs:
     steps:
       - name: Process inputs
         id: inputs
+        env:
+          ENV_VARS: ${{ inputs.env }}
         run: |
           # Process inputs
           exclude='${{ inputs.exclude }}'
@@ -189,6 +195,12 @@ jobs:
             exclude_args+=('--exclude' "$pkg")
           done
           echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
+
+          while IFS= read -r line; do
+            if [[ $line =~ [^[:space:]] && ! $line =~ ^[[:space:]]*# ]]; then
+              echo "Got: $line"
+            fi
+          done <<< "$ENV_VARS"
 
       # We intentionally do not use lfs: true here, instead using the caching method to save LFS bandwidth.
       - name: Checkout repository
@@ -266,3 +278,5 @@ jobs:
         with:
           name: failed-tests-${{ inputs.target }}-${{ github.run_number }}
           path: ${{ inputs.failed-artifacts }}
+
+# TODO: Add generic support for env variables (for Vello Skip LFS tests, but also open-ended), through an input list of lines processed by process inputs step

@@ -125,6 +125,15 @@ jobs:
       lfs-key: ${{ needs.prime-lfs-cache.outputs.key }}
       failed-artifacts: test/data
       enable-gpu: true
+      env: |
+        # Some interesting variable
+        INTERESTING='foo bar'
+
+        # Another one
+        ANOTHER_ONE="cool"
+
+        # .. and yet another
+        YET_ANOTHER=lul
 
   # msrv:
   #   name: ${{ fromJson('''MSRV''') }}
