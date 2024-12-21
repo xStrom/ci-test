@@ -7,7 +7,7 @@ on:
       target:
         type: string
         required: true
-      packages:
+      crates:
         type: string
         required: true
       env:
@@ -64,7 +64,13 @@ jobs:
       - name: Install cargo-apk
         run: cargo install cargo-apk
 
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ inputs.target }}
+          save-if: ${{ github.event_name != 'merge_group' }}
+
       - name: Run cargo apk check
         env:
           RUSTFLAGS: -D warnings
-        run: cargo apk check ${{ inputs.packages }} --profile ci --target ${{ inputs.target }} --all-features
+        run: cargo apk check ${{ inputs.crates }} --profile ci --target ${{ inputs.target }} --all-features
