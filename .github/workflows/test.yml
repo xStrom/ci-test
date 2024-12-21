@@ -197,7 +197,7 @@ jobs:
           echo "EXCLUDE_ARGS=${exclude_args[*]}" | tee -a $GITHUB_ENV
 
           while IFS= read -r line; do
-            if [[ $line =~ [[:space:]] && ! $line =~ ^[[:space:]]*# ]]; then
+            if [[ $line =~ [^[:space:]] && ! $line =~ ^[[:space:]]*# ]]; then
               echo "$line" | tee -a $GITHUB_ENV
             fi
           done <<< "$ENV_VARS"
