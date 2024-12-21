@@ -139,6 +139,29 @@ on:
 
             "wasm32-unknown-unknown":     "true"
           }
+      gpu:
+        type: string
+        required: false
+        default: >
+          {
+            "x86_64-pc-windows-msvc":     false,
+            "aarch64-pc-windows-msvc":    false,
+
+            "x86_64-apple-darwin":        true,
+            "aarch64-apple-darwin":       true,
+
+            "x86_64-unknown-linux-gnu":   true,
+            "aarch64-unknown-linux-gnu":  true,
+
+            "x86_64-linux-android":       false,
+            "aarch64-linux-android":      false,
+            "armv7-linux-androideabi":    false,
+
+            "x86_64-apple-ios":           false,
+            "aarch64-apple-ios":          false,
+
+            "wasm32-unknown-unknown":     false
+          }
 
 jobs:
   test:
@@ -150,6 +173,7 @@ jobs:
     env:
       CONFIG_LINKER: ${{ fromJson(inputs.linkers)[inputs.target] != '' && format('target.{0}.linker = "{1}"', inputs.target, fromJson(inputs.linkers)[inputs.target]) || '' }}
       CONFIG_RUNNER: ${{ fromJson(inputs.runners)[inputs.target] != '' && format('target.{0}.runner = "{1}"', inputs.target, fromJson(inputs.runners)[inputs.target]) || '' }}
+      DISABLE_GPU: ${{ !fromJson(inputs.gpu)[inputs.target] }}
     steps:
       - name: Process inputs
         id: inputs
@@ -195,6 +219,15 @@ jobs:
         uses: taiki-e/install-action@v2
         with:
           tool: cargo-nextest
+
+      - name: Install GPU dependencies
+        if: runner.os == 'Linux' && fromJson(inputs.gpu)[inputs.target] && fromJson(inputs.runnable)[inputs.target]
+        # https://launchpad.net/~kisak/+archive/ubuntu/turtle
+        run: |
+          # Install GPU dependencies
+          sudo add-apt-repository ppa:kisak/turtle
+          sudo apt update
+          sudo apt install xvfb libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
 
       - name: Install dependencies
         if: inputs.dependencies != ''

@@ -26,7 +26,7 @@ mod tests {
         let mut one = File::open("data/one.txt").unwrap();
         let mut contents = String::new();
         one.read_to_string(&mut contents).unwrap();
-        if contents != "The Onez" {
+        if contents != "The One" {
             let mut file = File::create("data/two.txt").unwrap();
             file.write_all(b"The Two").unwrap();
             panic!("Unexpected contents!");
