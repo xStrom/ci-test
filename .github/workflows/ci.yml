@@ -127,13 +127,13 @@ jobs:
       enable-gpu: true
       env: |
         # Some interesting variable
-        INTERESTING='foo bar'
+        INTERESTING='lul=foo bar'
                          
         # Another one
-        ANOTHER_ONE="cool"
+        ANOTHER_ONE="lul=zoo"
 
         # .. and yet another
-        YET_ANOTHER=lul
+        YET_ANOTHER=lul=cool
 
   # msrv:
   #   name: ${{ fromJson('''MSRV''') }}
