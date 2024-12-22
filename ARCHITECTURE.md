@@ -18,6 +18,12 @@ We can set the `RUSTC_BOOTSTRAP` environment variable to `1`.
 This is officially not meant for anything other than bootstrapping the compiler.
 However in practice it is just what we need, as it allows using unstable features with the stable toolchain.
 
+## Matching Docs.rs when building documentation
+
+We need to use the latest nightly toolchain because that is what [Docs.rs does][docsrs-build].
+We also need to make sure that we test all features and pass the `docsrs` cfg flag.
+Docs.rs cross compiles all targets except `x86_64-unknown-linux-gnu` so we do the same.
+
 ## Passing arbitrary inputs to `bash`
 
 We can't directly use e.g. `${{ inputs.desc }}` in a `bash` script because we can't escape special characters.
@@ -41,3 +47,4 @@ This of course assumes that we don't source inputs from outside the repository, 
 
 [`-Zdoctest-xcompile`]: https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#doctest-xcompile
 [doctest-xcompile-issue]: https://github.com/rust-lang/rust/issues/64245
+[docsrs-build]: https://docs.rs/about/builds
