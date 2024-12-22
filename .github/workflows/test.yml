@@ -60,23 +60,23 @@ on:
         required: false
         default: >
           {
-            "x86_64-pc-windows-msvc":     "windows-latest",
-            "aarch64-pc-windows-msvc":    "windows-latest",
+            "x86_64-pc-windows-msvc":     "windows-2022",
+            "aarch64-pc-windows-msvc":    "windows-2022",
 
-            "x86_64-apple-darwin":        "macos-latest",
-            "aarch64-apple-darwin":       "macos-latest",
+            "x86_64-apple-darwin":        "macos-14",
+            "aarch64-apple-darwin":       "macos-14",
 
-            "x86_64-unknown-linux-gnu":   "ubuntu-latest",
-            "aarch64-unknown-linux-gnu":  "ubuntu-latest",
+            "x86_64-unknown-linux-gnu":   "ubuntu-24.04",
+            "aarch64-unknown-linux-gnu":  "ubuntu-24.04",
 
-            "x86_64-linux-android":       "ubuntu-latest",
-            "aarch64-linux-android":      "ubuntu-latest",
-            "armv7-linux-androideabi":    "ubuntu-latest",
+            "x86_64-linux-android":       "ubuntu-24.04",
+            "aarch64-linux-android":      "ubuntu-24.04",
+            "armv7-linux-androideabi":    "ubuntu-24.04",
 
-            "x86_64-apple-ios":           "macos-latest",
-            "aarch64-apple-ios":          "macos-latest",
+            "x86_64-apple-ios":           "macos-14",
+            "aarch64-apple-ios":          "macos-14",
 
-            "wasm32-unknown-unknown":     "ubuntu-latest"
+            "wasm32-unknown-unknown":     "ubuntu-24.04"
           }
       runnable:
         type: string

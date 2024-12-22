@@ -47,7 +47,7 @@ on:
 jobs:
   doc:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         shell: bash

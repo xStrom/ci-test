@@ -23,7 +23,7 @@ on:
 jobs:
   prime-lfs-cache:
     name: LFS cache
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     continue-on-error: true
     outputs:
       key: lfs-${{ steps.key.outputs.value }}
