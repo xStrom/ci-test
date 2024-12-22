@@ -85,6 +85,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check presence
+        id: presence
+        uses: xStrom/ci-test/presence@main
+
       - name: Get configuration
         id: config
         uses: xStrom/ci-test/config@main
@@ -97,11 +101,28 @@ jobs:
           toolchain: ${{ steps.config.outputs.rust-msrv }}
           targets: ${{ inputs.target }}
 
+      - name: Install cargo-hack
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-hack
+
       - name: Install additional dependencies
         if: inputs.dependencies != ''
         run: |
           # Install additional dependencies
           ${{ inputs.dependencies }}
 
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ inputs.target }}
+          save-if: ${{ github.event_name != 'merge_group' }}
+
       - name: Run cargo check
-        run: cargo check --workspace $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }}
+        run: cargo hack check --workspace --ignore-private $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature
+
+      - name: Run cargo check (no debug_assertions)
+        if: steps.presence.outputs.debug-assertions == 'true'
+        env:
+          CARGO_PROFILE_CI_DEBUG_ASSERTIONS: "false"
+        run: cargo hack check --workspace --ignore-private $EXCLUDE_ARGS --locked --profile ci --target ${{ inputs.target }} --optional-deps --each-feature

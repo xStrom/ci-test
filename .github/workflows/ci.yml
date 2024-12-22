@@ -126,14 +126,20 @@ jobs:
   #     failed-artifacts: test/data
   #     enable-gpu: true
 
-  # msrv:
-  #   name: ${{ fromJson('''MSRV''') }}
-  #   strategy:
-  #     matrix:
-  #       target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
-  #   uses: xStrom/ci-test/.github/workflows/msrv.yml@main
-  #   with:
-  #     target: ${{ matrix.target }}
+  msrv:
+    name: ${{ fromJson('''MSRV''') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        #target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
+        target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+    uses: xStrom/ci-test/.github/workflows/msrv.yml@main
+    with:
+      target: ${{ matrix.target }}
+      dependencies: >-
+        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+        ' || '' }}
 
   # docs:
   #   name: ${{ fromJson('''Docs''') }}
