@@ -87,7 +87,12 @@ jobs:
           toolchain: nightly
           targets: ${{ inputs.target }}
 
-      # We test documentation using nightly to match docs.rs.
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ inputs.target }}
+          save-if: ${{ github.event_name != 'merge_group' }}
+
       - name: Run cargo doc
         env:
           RUSTDOCFLAGS: --cfg docsrs -D warnings
