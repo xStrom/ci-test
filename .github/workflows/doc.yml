@@ -70,7 +70,8 @@ on:
 jobs:
   doc:
     name: ${{ fromJson(inputs.names)[inputs.target] }}
-    runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    #runs-on: ${{ fromJson(inputs.oses)[inputs.target] }}
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
