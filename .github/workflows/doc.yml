@@ -11,6 +11,10 @@ on:
         type: string
         required: false
         default: ""
+      dependencies:
+        type: string
+        required: false
+        default: ""
       env:
         type: string
         required: false
@@ -86,6 +90,12 @@ jobs:
         with:
           toolchain: nightly
           targets: ${{ inputs.target }}
+
+      - name: Install additional dependencies
+        if: inputs.dependencies != ''
+        run: |
+          # Install additional dependencies
+          ${{ inputs.dependencies }}
 
       - name: Restore cache
         uses: Swatinem/rust-cache@v2

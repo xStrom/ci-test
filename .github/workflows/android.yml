@@ -10,6 +10,10 @@ on:
       crates:
         type: string
         required: true
+      dependencies:
+        type: string
+        required: false
+        default: ""
       env:
         type: string
         required: false
@@ -63,6 +67,12 @@ jobs:
 
       - name: Install cargo-apk
         run: cargo install cargo-apk
+
+      - name: Install additional dependencies
+        if: inputs.dependencies != ''
+        run: |
+          # Install additional dependencies
+          ${{ inputs.dependencies }}
 
       - name: Restore cache
         uses: Swatinem/rust-cache@v2
