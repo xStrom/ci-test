@@ -1,3 +1,15 @@
+## Version numbers
+
+When new versions of the CI scripts are released, the following holds:
+
+* `MAJOR` - Anything goes, carefully reading the changelog is required and changes to the calling CI script are likely.
+* `MINOR` - Guaranteed backwards compatible API which means no calling CI script changes are required.
+            CI failure conditions have likely changed, so changes to the calling repository might be required.
+* `PATCH` - Guaranteed stable API and unchanged CI failure conditions. Trivial upgrade likely.
+
+For the releases where `MAJOR` is still zero we shift the importance of `MINOR` and `PATCH` up by one and have no functional `PATCH` number.
+Which is to say that instead of `MAJOR.MINOR.PATCH` we have effectively `0.MAJOR.MINOR`.
+
 ## Fairly reproducible runs
 
 If a CI run succeeds, then reruns should in most cases also succeed.
