@@ -112,7 +112,7 @@ jobs:
       - name: Install cargo-hack
         uses: taiki-e/install-action@v2
         with:
-          tool: cargo-hack@0.6
+          tool: cargo-hack@0.6.32
 
       - name: Install additional dependencies
         if: inputs.dependencies != ''
