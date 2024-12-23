@@ -33,9 +33,9 @@ on:
         required: false
         default: >
           {
-            "x86_64-linux-android":       "ubuntu-24.04",
-            "aarch64-linux-android":      "ubuntu-24.04",
-            "armv7-linux-androideabi":    "ubuntu-24.04"
+            "x86_64-linux-android":       "ubuntu-22.04",
+            "aarch64-linux-android":      "ubuntu-22.04",
+            "armv7-linux-androideabi":    "ubuntu-22.04"
           }
 
 jobs:
