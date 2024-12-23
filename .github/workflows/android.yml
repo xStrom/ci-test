@@ -66,7 +66,7 @@ jobs:
           targets: ${{ inputs.target }}
 
       - name: Install cargo-apk
-        run: cargo install cargo-apk --locked --version ^0.10.0
+        run: cargo install cargo-apk --locked --version ${{ steps.config.outputs.cargo-apk-version }}
 
       - name: Install additional dependencies
         if: inputs.dependencies != ''

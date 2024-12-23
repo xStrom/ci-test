@@ -73,32 +73,32 @@ jobs:
   #   name: ${{ fromJson('''Check''') }}
   #   uses: xStrom/ci-test/.github/workflows/typos.yml@main
 
-  # clippy:
-  #   name: ${{ fromJson('''Clippy''') }}
-  #   needs: config
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown]
-  #       #target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
-  #   uses: xStrom/ci-test/.github/workflows/clippy.yml@main
-  #   with:
-  #     target: ${{ matrix.target }}
-  #     exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
-  #     dependencies: >-
-  #       ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-  #         sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-  #       ' || '' }}
+  clippy:
+    name: ${{ fromJson('''Clippy''') }}
+    needs: config
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu, wasm32-unknown-unknown]
+        #target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+    uses: xStrom/ci-test/.github/workflows/clippy.yml@main
+    with:
+      target: ${{ matrix.target }}
+      exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
+      dependencies: >-
+        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+        ' || '' }}
 
-  # android:
-  #   name: ${{ fromJson('''Android''') }}
-  #   strategy:
-  #     matrix:
-  #       target: [aarch64-linux-android]
-  #   uses: xStrom/ci-test/.github/workflows/android.yml@main
-  #   with:
-  #     target: ${{ matrix.target }}
-  #     crates: -p test
+  android:
+    name: ${{ fromJson('''Android''') }}
+    strategy:
+      matrix:
+        target: [aarch64-linux-android]
+    uses: xStrom/ci-test/.github/workflows/android.yml@main
+    with:
+      target: ${{ matrix.target }}
+      crates: -p test
 
   # prime-lfs-cache:
   #   name: Prime
@@ -126,22 +126,22 @@ jobs:
   #     failed-artifacts: test/data
   #     enable-gpu: true
 
-  msrv:
-    name: ${{ fromJson('''MSRV''') }}
-    needs: config
-    strategy:
-      fail-fast: false
-      matrix:
-        #target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
-        target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
-    uses: xStrom/ci-test/.github/workflows/msrv.yml@main
-    with:
-      target: ${{ matrix.target }}
-      exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
-      dependencies: >-
-        ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
-          sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
-        ' || '' }}
+  # msrv:
+  #   name: ${{ fromJson('''MSRV''') }}
+  #   needs: config
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       #target: [x86_64-pc-windows-msvc, aarch64-apple-darwin, x86_64-unknown-linux-gnu]
+  #       target: [x86_64-pc-windows-msvc, aarch64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin, x86_64-unknown-linux-gnu, aarch64-unknown-linux-gnu, x86_64-linux-android, aarch64-linux-android, armv7-linux-androideabi, x86_64-apple-ios, aarch64-apple-ios, wasm32-unknown-unknown]
+  #   uses: xStrom/ci-test/.github/workflows/msrv.yml@main
+  #   with:
+  #     target: ${{ matrix.target }}
+  #     exclude: ${{ fromJson(needs.config.outputs.exclude)[matrix.target] }}
+  #     dependencies: >-
+  #       ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '
+  #         sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
+  #       ' || '' }}
 
   doc:
     name: ${{ fromJson('''Documentation''') }}
