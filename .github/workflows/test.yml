@@ -222,7 +222,7 @@ jobs:
         if: fromJson(inputs.runnable)[inputs.target]
         uses: taiki-e/install-action@v2
         with:
-          tool: cargo-nextest
+          tool: ${{ format('cargo-nextest@{0}', steps.config.outputs.cargo-nextest-version) }}
 
       - name: Install GPU dependencies
         if: runner.os == 'Linux' && env.DISABLE_GPU == 'false' && fromJson(inputs.runnable)[inputs.target]
