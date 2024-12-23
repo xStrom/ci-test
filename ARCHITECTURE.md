@@ -1,3 +1,9 @@
+## Dependency versions
+
+Generally dependency version requirements allow for SemVer compatible updates.
+This allows for bug fixes to propagate even without updating the CI scripts.
+However, in cases where even even SemVer compatible updates can cause CI failures, the version requirements are pinned.
+
 ## Cross compiling doc tests
 
 In order to cross compile doc tests, i.e. code blocks inside documentation, we need to use the [`-Zdoctest-xcompile`] feature.
