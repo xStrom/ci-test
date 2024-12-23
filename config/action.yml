@@ -18,6 +18,8 @@ outputs:
     value: ${{ steps.rust-msrv.outputs.version }}
   rust-host:
     value: ${{ steps.rust-host.outputs.triple }}
+  cargo-hack-version:
+    value: "0.6" # ^0.6.0
 
 runs:
   using: composite
