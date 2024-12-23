@@ -23,12 +23,49 @@ With the Rust toolchain we specify `MAJOR.MINOR` and allow for `PATCH` releases 
 This is because we treat many warnings as errors.
 So even though a new `MINOR` release will compile old Rust code, it usually generates new warnings which would result in CI failure.
 
+## Testing individual features despite Cargo's feature unification
+
+We don't use `--all-targets` because then even `--lib` and `--bins` are compiled with dev dependencies enabled, which does not match how they would be compiled by users.
+A dev dependency might transitively enable a feature that we need for a regular dependency, and checking with `--all-targets` would not find our feature requirements lacking.
+This problem still applies to Cargo resolver version 3.
+Thus we split all the targets into two steps, one with `--lib --bins` and another with `--tests --benches --examples`.
+Also, we can't actually give `--lib --bins` explicitly because then Cargo will error on binary-only packages.
+Luckily the default behavior of Cargo with no explicit targets is the same as with `--lib --bins` but without the error.
+
+We use [`cargo-hack`] for a similar reason.
+Cargo's `--workspace` will do feature unification across the whole workspace.
+So a dependency might have a feature enabled by just one package, while being used by multiple packages.
+This is solved by `cargo-hack` by dealing with each package separately.
+
+Using `cargo-hack` also allows us to more easily test the feature matrix of our packages.
+We use `--optional-deps --each-feature` which will run a separate check for every feature.
+
+## Ensuring MSRV is correctly defined
+
+Linebender projects always define their MSRV in the root `Cargo.toml` via thea `rust-version` property.
+The MSRV jobs run only `cargo check` because different Clippy versions can disagree on goals and running tests introduces dev dependencies which may require a higher MSRV than the bare package.
+Checking is limited to packages that are intended for publishing (`publish = true`) to keep MSRV as low as possible.
+
+## Conditional compilation
+
+Every CI workflow that performs compilation supports the `target` input variable.
+This way every potential target can be verified, including any target specific code.
+
+Additionally, if the workspace uses [`debug_assertions`] then we verify all code twice, with it set to `true` or `false`.
+We always keep it `true` for external dependencies so that we can reuse the cache for faster builds.
+This does mean that doing a manual `--release` build before publishing is worth it and may reveal rare issues.
+
+## Running tests
+
+We use [`cargo-nextest`], which has a faster concurrency model for running tests.
+However [`cargo-nextest` does not support running doc tests][nextest-no-doc-tests], so we also have a `cargo test --doc` step.
+
 ## Cross compiling doc tests
 
 In order to cross compile doc tests, i.e. code blocks inside documentation, we need to use the [`-Zdoctest-xcompile`] feature.
 This feature is [not yet stabilized][doctest-xcompile-issue] and is officially only available via the nightly toolchain.
 
-We don't really want to use the latest nightly to compile our tests.
+We don't really want to use the latest nightly toolchain to compile our tests.
 It can contain behavior differences compared to what our code expects.
 The daily nature of its release cycle can also cause intermittent compilation issues in the CI.
 What we would like is a pinned nightly version that basically matches our pinned stable version as much as possible.
@@ -39,7 +76,7 @@ That means the stable version has 7 weeks worth of final fixes which the nightly
 The nightly version from the day the stable version was published might contain those fixes, but it also contains a bunch of behavior from future releases.
 
 Luckily there is a workaround.
-We can set the `RUSTC_BOOTSTRAP` environment variable to `1`.
+We can set the [`RUSTC_BOOTSTRAP`] environment variable to `1`.
 This is officially not meant for anything other than bootstrapping the compiler.
 However in practice it is just what we need, as it allows using unstable features with the stable toolchain.
 
@@ -48,6 +85,13 @@ However in practice it is just what we need, as it allows using unstable feature
 We need to use the latest nightly toolchain because that is what [Docs.rs does][docsrs-build].
 We also need to make sure that we test all features and pass the `docsrs` cfg flag.
 Docs.rs cross compiles all targets except `x86_64-unknown-linux-gnu` so we do the same.
+
+## Caching issues
+
+We don't save caches when the CI was triggered by the merge queue, because those caches will never be re-used.
+That is, apart from the rare cases where there are multiple PRs in the merge queue.
+This is because [GitHub doesn't share caches between merge queues and the main branch][queue-cache-issue].
+To still be able to prime the cache, we trigger another CI run on `push` to `main` with the same commit that just had a CI run in `merge_group`.
 
 ## Passing arbitrary inputs to `bash`
 
@@ -68,10 +112,16 @@ echo "$ARG_DESC"          # -> echo "$ARG_DESC"   .. valid and prints the right 
 
 If we expect a known format from an input (e.g. package name, target triple) then it's fine to use it directly.
 Malformed input is not a security concern, but a functionality concern.
-This of course assumes that we don't source inputs from outside the repository, which would not have passed review.
+Malicious actors could just as well add a new custom bash script to the CI in their PR.
 
 [`-Zdoctest-xcompile`]: https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#doctest-xcompile
 [doctest-xcompile-issue]: https://github.com/rust-lang/rust/issues/64245
 [docsrs-build]: https://docs.rs/about/builds
 [SemVer]: https://semver.org/
 [gh-weekly-images]: https://github.com/actions/runner-images#ga
+[`cargo-hack`]: https://github.com/taiki-e/cargo-hack
+[`debug_assertions`]: https://doc.rust-lang.org/reference/conditional-compilation.html#debug_assertions
+[queue-cache-issue]: https://github.com/orgs/community/discussions/66430
+[`cargo-nextest`]: https://nexte.st/
+[nextest-no-doc-tests]: https://github.com/nextest-rs/nextest/issues/16
+[`RUSTC_BOOTSTRAP`]: https://rustc-dev-guide.rust-lang.org/building/bootstrapping/what-bootstrapping-does.html#complications-of-bootstrapping
