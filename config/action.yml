@@ -26,7 +26,7 @@ outputs:
     value: "1" # Behaves as ^1.0.0
   cargo-apk-version:
     value: "^0.10.0"
-  # We could in theory be fine with SemVer compatability, however the uncenter/setup-taplo action
+  # We could in theory be fine with SemVer compatibility, however the uncenter/setup-taplo action
   # that we use to install Taplo doesn't support anything other than pinning a specific version.
   taplo-version:
     value: "0.9.3"
