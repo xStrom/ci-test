@@ -35,6 +35,14 @@ With the Rust toolchain we specify `MAJOR.MINOR` and allow for `PATCH` releases 
 This is because we treat many warnings as errors.
 So even though a new `MINOR` release will compile old Rust code, it usually generates new warnings which would result in CI failure.
 
+## *À la carte* workflows
+
+To allow for a wide variety of repositories to use these CI scripts, without a lot of skipped job noise in the UI, workflows are split by purpose.
+A repository might need to run Clippy against five different targets, not have any target specific documentation, and not be interested in a MSRV.
+Splitting the workflows allows those needs to be perfectly met.
+The main downside is that there is no way to use an in-script variable to define the version of the called CI script.
+Which means that the caller needs to update all the separate instances, e.g. `clippy@v1.2.3` / `doc@v1.2.3` / `formatting@v1.2.3` etc.
+
 ## Testing individual features despite Cargo's feature unification
 
 We don't use `--all-targets` because then even `--lib` and `--bins` are compiled with dev dependencies enabled, which does not match how they would be compiled by users.
