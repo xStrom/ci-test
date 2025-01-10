@@ -43,6 +43,15 @@ Splitting the workflows allows those needs to be perfectly met.
 The main downside is that there is no way to use an in-script variable to define the version of the called CI script.
 Which means that the caller needs to update all the separate instances, e.g. `clippy@v1.2.3` / `doc@v1.2.3` / `formatting@v1.2.3` etc.
 
+## Flexible workflow configuration
+
+Most workflows have the common inputs `target`, `exclude`, `dependencies`, and `env`.
+These can be used to control the target triple, which packages to exclude, custom additional dependencies to install, and custom environment variables to be set.
+
+TODO: Also specific extra inputs.
+
+TODO: Also advanced inputs.
+
 ## Testing individual features despite Cargo's feature unification
 
 We don't use `--all-targets` because then even `--lib` and `--bins` are compiled with dev dependencies enabled, which does not match how they would be compiled by users.
